@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="HELIOS — Health Evaluation & Life Indicators Observation System. Prototipo de acompañamiento de salud para misiones espaciales simuladas. No es una herramienta clínica." />
+    <meta name="theme-color" content="#1a0f14" />
+    <title>HELIOS · Health Evaluation & Life Indicators Observation System</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      try {
+        var storedLang = localStorage.getItem('helios-locale')
+        document.documentElement.lang = storedLang === 'es' ? 'es' : 'en'
+        var stored = localStorage.getItem('helios-theme') || localStorage.getItem('vitalink-theme') || 'dark'
+        var dark = stored !== 'light'
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      } catch (error) {
+        document.documentElement.lang = 'en'
+        document.documentElement.dataset.theme = 'dark'
+        document.documentElement.style.colorScheme = 'dark'
+      }
+    </script>
+  </head>
+  <body>
+    <!-- translate=no: Chrome/edge auto-translate wraps text nodes in <font>, which
+         breaks React removeChild on host Text and blank the page on re-render. -->
+    <div id="root" translate="no"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

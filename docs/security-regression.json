@@ -1,0 +1,40 @@
+{
+  "verifiedOn": "2026-11-14",
+  "frontendUnit": {
+    "passed": 50,
+    "failed": 0
+  },
+  "backendFull": {
+    "passed": 77,
+    "failed": 6
+  },
+  "backendExistingFailures": [
+    "analysis conserva las reglas existentes",
+    "selectors conserva las reglas existentes",
+    "reduce conserva las reglas existentes",
+    "inventory conserva las reglas existentes",
+    "format conserva las reglas existentes",
+    "crew conserva las reglas existentes"
+  ],
+  "backendSecurity": {
+    "passed": 19,
+    "failed": 0
+  },
+  "backendFocusedSecurityAiNasa": {
+    "passed": 32,
+    "failed": 0
+  },
+  "backendHttp": {
+    "passed": 3,
+    "failed": 0
+  },
+  "browserRegression": {
+    "passed": 6,
+    "failed": 0
+  },
+  "notes": [
+    "Existing simulator parity failures remain.",
+    "Browser regression repeated after builds completed.",
+    "No production deployment or credential rotation performed."
+  ]
+}

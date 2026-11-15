@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.git
+node_modules
+dist
+artifacts
+test-results
+playwright-report
+coverage
+docs
+e2e
+*.tsbuildinfo

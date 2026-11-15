@@ -1,0 +1,145 @@
+import type { Mission, MissionStage, PrepItem, PrepStatus } from './types'
+
+export const MISSION_STAGE_LABEL: Record<MissionStage, string> = {
+  preembarque: 'Preembarque',
+  a_bordo: 'A bordo',
+  posmision: 'Posmisión',
+}
+
+export const PREP_STATUS_LABEL: Record<PrepStatus, string> = {
+  propuesto: 'Propuesto',
+  pendiente_revision: 'Pendiente de revisión',
+  aprobado: 'Aprobado',
+  disponible: 'Disponible',
+  faltante: 'Faltante',
+  cargado_verificado: 'Cargado y verificado',
+}
+
+export function defaultMission(): Mission {
+  return {
+    id: 'mission-helios-demo',
+    name: 'HELIOS Demo · Hábitat orbital',
+    stage: 'a_bordo',
+    destination: 'Órbita baja (simulación)',
+    durationDays: 42,
+    crewCount: 4,
+    activities: ['Operaciones de hábitat', 'Ejercicio diario', 'EVA de demostración', 'Ciencia a bordo'],
+    openedAt: Date.UTC(2026, 1, 1, 14, 32, 0),
+    stageChangedAt: Date.UTC(2026, 1, 1, 14, 32, 0),
+  }
+}
+
+export function defaultPrepItems(at: number): PrepItem[] {
+  return [
+    {
+      id: 'prep-hygiene',
+      title: 'Material de higiene y contingencias comunes',
+      category: 'suministro',
+      status: 'cargado_verificado',
+      riskIds: ['risk-immune', 'risk-dust'],
+      resourceId: null,
+      note: 'Categoría a revisar por operaciones. No es una lista de medicamentos.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-eval',
+      title: 'Kit de evaluación médica a bordo',
+      category: 'equipo',
+      status: 'pendiente_revision',
+      riskIds: ['risk-msk-cv', 'risk-sans'],
+      resourceId: 'eval-kit',
+      note: 'El inventario marca el kit por revisar.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-oximeter',
+      title: 'Oxímetro disponible y verificado',
+      category: 'equipo',
+      status: 'disponible',
+      riskIds: ['risk-eva'],
+      resourceId: 'oximeter',
+      note: 'Equipo reutilizable en módulo médico.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-bp',
+      title: 'Tensiómetro disponible',
+      category: 'equipo',
+      status: 'disponible',
+      riskIds: ['risk-msk-cv'],
+      resourceId: 'bp-cuff',
+      note: 'Gabinete A.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-thermo',
+      title: 'Termómetro disponible',
+      category: 'equipo',
+      status: 'disponible',
+      riskIds: ['risk-immune'],
+      resourceId: 'thermometer',
+      note: 'Gabinete B.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-nutrition',
+      title: 'Suministros nutricionales aprobados',
+      category: 'suministro',
+      status: 'aprobado',
+      riskIds: ['risk-nutrition', 'risk-med-stability'],
+      resourceId: 'supplement',
+      note: 'El producto concreto lo define el personal autorizado.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-sleep',
+      title: 'Plan de sueño y carga de trabajo',
+      category: 'planificacion',
+      status: 'propuesto',
+      riskIds: ['risk-sleep'],
+      resourceId: null,
+      note: 'Depende de planificación y entrenamiento, no solo de inventario.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-bmed',
+      title: 'Apoyo de salud conductual disponible',
+      category: 'entrenamiento',
+      status: 'aprobado',
+      riskIds: ['risk-bmed'],
+      resourceId: null,
+      note: 'Incluye el espacio privado de Quirón Bot y el canal a psicología.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-radiation',
+      title: 'Revisión de exposición y protección',
+      category: 'proteccion',
+      status: 'pendiente_revision',
+      riskIds: ['risk-radiation'],
+      resourceId: null,
+      note: 'Referencia HRP/OSDR. Este prototipo no calcula dosis.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-eva-metabolic',
+      title: 'Revisión de monitoreo de esfuerzo para EVA de demostración',
+      category: 'equipo',
+      status: 'propuesto',
+      riskIds: ['risk-eva', 'risk-eva-metabolic'],
+      resourceId: 'oximeter',
+      note: 'Basado en NTRS xEMU/HS3: FC y tasa metabólica como contexto. No hay telemetría de traje pública en este MVP.',
+      updatedAt: at,
+    },
+    {
+      id: 'prep-post',
+      title: 'Agenda de revisiones de posmisión',
+      category: 'planificacion',
+      status: 'propuesto',
+      riskIds: ['risk-sensorimotor', 'risk-msk-cv', 'risk-bmed'],
+      resourceId: null,
+      note: 'Se activa al pasar a posmisión; no cierra episodios abiertos.',
+      updatedAt: at,
+    },
+  ]
+}

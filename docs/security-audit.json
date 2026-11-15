@@ -1,0 +1,21 @@
+{
+  "repositories": [
+    {
+      "repository": "astrodeepspacenasa",
+      "sourceFilesScanned": 131,
+      "historyObjectsScanned": 203,
+      "buildAssetsScanned": 7,
+      "configuredPrivateValues": 0,
+      "findings": []
+    },
+    {
+      "repository": "NASA_SPACE_APP-BACKEND",
+      "sourceFilesScanned": 84,
+      "historyObjectsScanned": 101,
+      "buildAssetsScanned": 51,
+      "configuredPrivateValues": 1,
+      "findings": []
+    }
+  ],
+  "limitation": "Heuristic scan of locally available Git refs and text artifacts; not a guarantee that all secrets were found."
+}

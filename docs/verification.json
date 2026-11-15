@@ -1,0 +1,35 @@
+{
+  "verifiedOn": "2026-11-14",
+  "fixtures": [
+    {
+      "file": "osdr.json",
+      "sourceUrl": "https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-575/",
+      "sha256": "1b48ae38ac31d37929d5dbcc922794929af002023bbf432de16737fb5d3f3dab"
+    },
+    {
+      "file": "osdr288.json",
+      "sourceUrl": "https://visualization.osdr.nasa.gov/biodata/api/v2/dataset/OSD-288/",
+      "sha256": "eaa768e8676807c5f912d8c9d499421d9c7e96cb9aaf8210609e1e4392e88131"
+    },
+    {
+      "file": "radlab.json",
+      "sourceUrl": "https://visualization.osdr.nasa.gov/radlab/api?instrument=REM&timestamp%3E=2023-05-16&timestamp%3C=2023-05-16T01%3A00&absorbed_dose_rate&dose_equivalent_rate&spacecraft&format=json",
+      "sha256": "a98ac26edc0cab6960adf29e3681b225a339fb81f935d410a16838f549afaa82"
+    },
+    {
+      "file": "donki.json",
+      "sourceUrl": "https://ccmc.gsfc.nasa.gov/DONKI/WS/get/FLR?startDate=2024-05-10&endDate=2024-05-10",
+      "sha256": "77cd9c51213b52db7f5a5894ff70a61718d6ce0c87ef344b08c40467eea09ad1"
+    },
+    {
+      "file": "sep.json",
+      "sourceUrl": "https://ccmc.gsfc.nasa.gov/DONKI/WS/get/SEP?startDate=2024-05-10&endDate=2024-05-11",
+      "sha256": "69dcd0c3a44e5c297db7d9ea55531910ee11a199b35d9e90f61685e0822bc06c"
+    },
+    {
+      "file": "cme.json",
+      "sourceUrl": "https://ccmc.gsfc.nasa.gov/DONKI/WS/get/CME?startDate=2024-05-10&endDate=2024-05-11",
+      "sha256": "b2437563d9e53752ca97ee28b6c6d3495a24d92f8ad4ba21533e6e3e86b04f00"
+    }
+  ]
+}

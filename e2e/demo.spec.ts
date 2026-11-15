@@ -1,0 +1,78 @@
+import AxeBuilder from '@axe-core/playwright'
+import { expect, test } from '@playwright/test'
+
+test('recorre el flujo principal con datos compartidos', async ({ page }) => {
+  await page.goto('/app')
+  await expect(page.getByTestId('sim-pill')).toHaveText('Simulation')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await page.getByTestId('theme-toggle').click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await page.getByTestId('theme-toggle').click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+  await page.getByTestId('crew-mateo-ruiz').click()
+  await expect(page.getByRole('heading', { level: 1, name: 'Mateo Ruiz' })).toBeVisible()
+  await page.getByTestId('crew-elena-torres').click()
+  await page.getByTestId('open-symptom').click()
+  await page.getByTestId('save-symptom').click()
+  await expect(page.getByText('Enter at least one symptom or a note.')).toBeVisible()
+  await page.getByTestId('symptom-cansancio').check()
+  await page.getByTestId('symptom-note').fill('Cansancio al moverme por el módulo.')
+  await page.getByTestId('save-symptom').click()
+  await expect(page.getByText('Cansancio al moverme por el módulo.')).toBeVisible()
+
+  await page.getByRole('link', { name: 'History' }).click()
+  await expect(page.getByRole('listitem').filter({ hasText: 'Cansancio al moverme por el módulo.' }).first()).toBeVisible()
+
+  await page.getByRole('link', { name: 'Alerts' }).click()
+  await expect(page.getByRole('heading', { name: 'Alert center' })).toBeVisible()
+  await page.getByRole('button', { name: /Cambio en signos/ }).click()
+  await page.getByRole('link', { name: 'Open analysis' }).click()
+  await expect(page.getByTestId('analysis-local')).toContainText('Simulated analysis engine')
+  await expect(page.getByTestId('analysis-local')).not.toContainText('diagnóstico confirmado')
+
+  await page.getByRole('link', { name: 'Resources' }).click()
+  await page.getByTestId('resource-oximeter').getByRole('button', { name: 'Oxímetro' }).click()
+  await page.getByTestId('open-use').click()
+  await page.getByTestId('use-quantity').fill('0')
+  await page.getByTestId('save-use').click()
+  await expect(page.getByText('Enter an integer greater than zero.')).toBeVisible()
+  await page.getByTestId('use-quantity').fill('1')
+  await page.getByTestId('save-use').click()
+  await expect(page.getByTestId('notice')).toContainText('Reusable equipment use')
+  await expect(page.getByText('Use · Oxímetro')).toBeVisible()
+  await expect(page.getByTestId('resource-oximeter')).toContainText('2')
+
+  await page.getByRole('link', { name: 'Medical team' }).click()
+  await page.getByTestId('comm-subject').fill('Resumen de Elena')
+  await page.getByTestId('comm-body').fill('Se observó un cambio. Se pide revisión humana.')
+  await page.getByTestId('save-draft').click()
+  await expect(page.getByTestId('notice')).toContainText('Draft saved')
+  await page.getByTestId('queue-comm').click()
+  await expect(page.getByTestId('notice')).toContainText('The message is queued')
+  await expect(page.getByRole('cell', { name: 'Queued' })).toBeVisible()
+
+  await page.getByTestId('deliver-comm').click()
+  await expect(page.getByRole('cell', { name: 'Sent', exact: true })).toBeVisible()
+  await expect(page.getByRole('cell', { name: 'Received', exact: true })).toHaveCount(0)
+  await page.getByTestId('confirm-comm').click()
+  await expect(page.getByRole('cell', { name: 'Received', exact: true })).toHaveCount(1)
+})
+
+test('la pantalla principal no tiene violaciones críticas de accesibilidad', async ({ page }) => {
+  await page.goto('/app')
+  await expect(page.getByTestId('sim-pill')).toHaveText('Simulation')
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
+  const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical')
+  expect(serious.map((item) => item.id)).toEqual([])
+})
+
+test('la landing pública abre y lleva a la simulación', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByRole('heading', { level: 1, name: /human care/i })).toBeVisible()
+  await page.getByRole('link', { name: /enter the system/i }).first().click()
+  await expect(page).toHaveURL(/\/app/)
+  await expect(page.getByTestId('sim-pill')).toHaveText('Simulation')
+})
