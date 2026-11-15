@@ -92,9 +92,7 @@ export function RoleSwitcher() {
               aria-label={en ? 'Choose a role' : 'Elegí un rol'}
             >
               <p className="role-switch-lead">
-                {en
-                  ? 'Demonstration: each option opens that role’s workspace in this mission.'
-                  : 'Demostración: cada opción abre el espacio de ese rol en esta misión.'}
+                {en ? 'Pick a role.' : 'Elegí un rol.'}
               </p>
               <div className="role-switch-grid">
                 {ROLE_CARDS.map((card) => {

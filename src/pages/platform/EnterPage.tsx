@@ -115,11 +115,7 @@ export function EnterPage() {
         <div className="enter-hero">
           <p className="enter-badge">{en ? 'Space Apps · role demo' : 'Space Apps · demo por rol'}</p>
           <h1>{en ? 'How do you want to explore the mission?' : '¿Cómo querés explorar la misión?'}</h1>
-          <p className="enter-lead">
-            {en
-              ? 'HELIOS separates chief, crew, medic, and psychologist with consent. Technology serves the human problem — pick a role to prove it.'
-              : 'HELIOS separa jefe, tripulante, médica y psicólogo con consentimiento. La tecnología sirve al problema humano — elegí un rol para demostrarlo.'}
-          </p>
+          <p className="enter-lead">{en ? 'Pick a role.' : 'Elegí un rol.'}</p>
           <p className="enter-lead">
             <Link className="enter-link" to="/misiones/evidencia">
               {en ? 'Open NASA evidence →' : 'Abrir evidencia NASA →'}
