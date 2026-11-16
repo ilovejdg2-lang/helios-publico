@@ -19,7 +19,7 @@ export function PlatformIndicatorCharts({ missionId }: { missionId: string | nul
       .then((data) => {
         setItems(data.items)
         const kinds = chartablePlatformKinds(data.items)
-        if (kinds.length && !kinds.includes(kind)) setKind(kinds[0]!)
+        if (kinds.length) setKind((current) => (kinds.includes(current) ? current : kinds[0]!))
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Error'))
   }, [missionId])

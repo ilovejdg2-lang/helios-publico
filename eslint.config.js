@@ -15,6 +15,22 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'warn',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // Los textos del label viven en spans anidados (título + detalle), de ahí la profundidad.
+      'jsx-a11y/label-has-associated-control': ['error', { assert: 'either', depth: 4 }],
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        window: 'readonly',
+        fetch: 'readonly',
+        AbortController: 'readonly',
+      },
     },
   },
 )

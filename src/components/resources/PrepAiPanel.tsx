@@ -124,12 +124,14 @@ export function PrepAiPanel({
       {error ? <p className="field-error" role="alert">{error}</p> : null}
       {suggestions.length > 0 ? (
         <ul className="inv-ai-list">
-          {suggestions.map((item) => {
+          {suggestions.map((item, index) => {
             const on = picked.includes(item.title)
+            const inputId = `prep-suggestion-${index}`
             return (
               <li key={item.title}>
-                <label className={`inv-ai-item${on ? ' is-on' : ''}`}>
+                <label className={`inv-ai-item${on ? ' is-on' : ''}`} htmlFor={inputId}>
                   <input
+                    id={inputId}
                     type="checkbox"
                     checked={on}
                     onChange={() => setPicked((current) => (

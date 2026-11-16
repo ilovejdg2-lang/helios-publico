@@ -36,7 +36,12 @@ const DESCRIPTION: Record<Lang, string> = {
 }
 
 export function applyDocumentLocale(lang: Lang) {
-  const root = (globalThis as { document?: Document }).document
+  const root = (globalThis as {
+    document?: {
+      documentElement: { lang: string }
+      querySelector(selector: string): { setAttribute(name: string, value: string): void } | null
+    }
+  }).document
   if (!root) return
   root.documentElement.lang = lang
   root.querySelector('meta[name="description"]')?.setAttribute('content', DESCRIPTION[lang])

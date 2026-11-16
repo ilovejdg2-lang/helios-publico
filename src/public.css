@@ -985,11 +985,16 @@
 .others-row a:hover { border-color: var(--pub-accent); color: var(--pub-accent); }
 
 .video-frame {
-  aspect-ratio: 16/9; border-radius: 28px; overflow: hidden;
-  background: var(--pub-space); border: 1px solid rgba(255,255,255,0.08);
-  display: grid; place-items: center; color: #f4f2f8; text-align: center; padding: 28px;
+   aspect-ratio: 16/9; border-radius: 28px; overflow: hidden;
+   background: var(--pub-space); border: 1px solid rgba(255,255,255,0.08);
+   display: grid; place-items: center; color: #f4f2f8; text-align: center;
 }
-.video-frame iframe, .video-frame video { width: 100%; height: 100%; border: 0; }
+.video-frame > div { padding: 28px; }
+.video-frame iframe, .video-frame video {
+  display: block; width: 100%; height: 100%; min-width: 0; min-height: 0;
+  aspect-ratio: 16/9; border: 0;
+}
+.video-frame video { object-fit: contain; }
 
 .docs-grid, .data-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;
@@ -1010,6 +1015,114 @@
 .pill.lilac { background: color-mix(in srgb, var(--pub-lilac) 55%, transparent); }
 .pill.rose { background: color-mix(in srgb, var(--pub-rose) 55%, transparent); }
 .pill.warn { background: color-mix(in srgb, var(--pub-accent) 14%, transparent); color: var(--pub-accent); }
+
+/* Visor de documentos (DOCX renderizado en el navegador) */
+.doc-viewer-overlay {
+  position: fixed; inset: 0; z-index: 80;
+  background: color-mix(in srgb, var(--pub-space) 70%, transparent);
+  backdrop-filter: blur(6px);
+  animation: docViewerFade 180ms ease;
+}
+.doc-viewer {
+  position: fixed; z-index: 81; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column;
+  width: min(1040px, calc(100vw - 48px));
+  height: min(880px, calc(100dvh - 64px));
+  max-width: 100%; max-height: 100%;
+  background: var(--pub-warm); color: var(--pub-ink);
+  border: 1px solid color-mix(in srgb, var(--pub-ink) 12%, transparent);
+  border-radius: 24px; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(8, 10, 20, 0.38);
+  outline: none;
+}
+:root[data-theme="dark"] .doc-viewer {
+  background: #161a26; color: #f4f2f8;
+  border-color: rgba(255,255,255,0.1);
+}
+.doc-viewer-head {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 14px 14px 20px;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+.doc-viewer-heading { display: grid; gap: 2px; min-width: 0; }
+.doc-viewer-title {
+  margin: 0; font-size: 1.05rem; font-weight: 750; letter-spacing: -0.02em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.doc-viewer-format { margin: 0; font-size: 0.74rem; font-weight: 650; opacity: 0.62; }
+.doc-viewer-tools { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+.doc-viewer-tools .pub-btn-ghost {
+  min-height: 40px; padding: 0 14px; font-size: 0.85rem; cursor: pointer;
+}
+.doc-viewer-close {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  background: transparent; color: inherit; cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.doc-viewer-close:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.doc-viewer :is(button, a):focus-visible {
+  outline: 2px solid var(--pub-accent); outline-offset: 2px;
+}
+.doc-viewer-body {
+  position: relative; flex: 1; min-height: 0;
+  overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  background: color-mix(in srgb, var(--pub-ink) 8%, var(--pub-warm));
+}
+:root[data-theme="dark"] .doc-viewer-body { background: #0f121c; }
+.doc-viewer-doc { min-height: 100%; }
+.doc-viewer-status {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; padding: 24px; text-align: center;
+  background: color-mix(in srgb, var(--pub-warm) 94%, transparent);
+}
+:root[data-theme="dark"] .doc-viewer-status { background: rgba(15, 18, 28, 0.94); }
+.doc-viewer-status p { margin: 0; font-weight: 650; max-width: 32rem; }
+.doc-viewer-status.is-error { color: var(--pub-accent); }
+.doc-viewer-spinner { animation: docViewerSpin 900ms linear infinite; }
+@keyframes docViewerSpin { to { transform: rotate(360deg); } }
+@keyframes docViewerFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Páginas generadas por docx-preview */
+.doc-viewer .docx-content-wrapper {
+  background: transparent;
+  padding: 20px 16px 20px;
+}
+.doc-viewer .docx-content-wrapper > section.docx-content {
+  background: #fff; color: #111;
+  box-shadow: 0 12px 32px rgba(8, 10, 20, 0.16);
+}
+.doc-viewer .docx-content-wrapper > section.docx-content:last-child { margin-bottom: 0; }
+.doc-viewer .docx-scroll {
+  max-width: 100%; overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+}
+
+@media (max-width: 900px) {
+  .doc-viewer {
+    top: 0; left: 0; transform: none;
+    width: 100%; height: 100dvh; max-height: none;
+    border: 0; border-radius: 0;
+  }
+  .doc-viewer-head { padding: 10px 10px 10px 14px; }
+  .doc-viewer-title { font-size: 0.95rem; }
+  .doc-viewer-download span { display: none; }
+  .doc-viewer-download { padding: 0 12px; }
+  .doc-viewer .docx-content-wrapper {
+    padding: 0 0 12px; align-items: stretch;
+  }
+  .doc-viewer .docx-content-wrapper > section.docx-content {
+    box-shadow: none; margin-bottom: 12px;
+    padding: 18px 16px !important;
+  }
+}
+:root[data-reduce-motion="1"] .doc-viewer-spinner,
+:root[data-reduce-motion="1"] .doc-viewer-overlay { animation: none; }
+
 
 /* Escenas espaciales */
 .planet-host, .planet-canvas, .blackhole-canvas, .orbital-canvas, .data-network canvas {

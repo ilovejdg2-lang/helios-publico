@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { HeliosLogo } from '../../components/HeliosLogo'
 import { LocaleThemeSwitch } from '../../components/LocaleThemeSwitch'
@@ -43,16 +43,7 @@ export function MissionsHubPage() {
     return stageFilter === 'all' ? picked : picked.filter((row) => row.mission.stage === stageFilter)
   }, [items, stageFilter])
 
-  useEffect(() => {
-    document.title = en ? 'HELIOS · Missions' : 'HELIOS · Misiones'
-    if (!getSessionToken()) {
-      navigate('/entrar', { replace: true })
-      return
-    }
-    void refresh()
-  }, [navigate, en])
-
-  async function refresh() {
+  const refresh = useCallback(async () => {
     setLoading(true)
     setError('')
     try {
@@ -63,7 +54,16 @@ export function MissionsHubPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [en])
+
+  useEffect(() => {
+    document.title = en ? 'HELIOS · Missions' : 'HELIOS · Misiones'
+    if (!getSessionToken()) {
+      navigate('/entrar', { replace: true })
+      return
+    }
+    void refresh()
+  }, [navigate, en, refresh])
 
   function enter(missionId: string, membershipRole: string) {
     clearRoleScopedUiState()

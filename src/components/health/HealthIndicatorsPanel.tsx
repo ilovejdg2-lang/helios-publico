@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocale } from '../../i18n'
 import {
   INDICATOR_CATALOG,
@@ -48,15 +48,15 @@ export function HealthIndicatorsPanel({
   const [origin, setOrigin] = useState<HealthIndicatorReading['origin']>('manual')
   const [notes, setNotes] = useState('')
 
-  async function load() {
+  const load = useCallback(async () => {
     if (!missionId) return
     const data = await platformApi.listIndicators(missionId)
     setItems(data.items)
-  }
+  }, [missionId])
 
   useEffect(() => {
     void load().catch((err) => setError(err instanceof Error ? err.message : 'Error'))
-  }, [missionId])
+  }, [load])
 
   const byKind = useMemo(() => {
     const map = new Map<IndicatorKind, HealthIndicatorReading[]>()

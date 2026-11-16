@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocale } from '../../i18n'
 import {
   dueReminders,
@@ -19,10 +19,10 @@ export function MissionRemindersPanel({ missionId }: { missionId: string | null 
   const [notify, setNotify] = useState(remindersEnabledNotify())
   const [perm, setPerm] = useState<string>('default')
 
-  function reload() {
+  const reload = useCallback(() => {
     if (!missionId) return
     setItems(ensureReminders(missionId))
-  }
+  }, [missionId])
 
   useEffect(() => {
     reload()
@@ -30,7 +30,7 @@ export function MissionRemindersPanel({ missionId }: { missionId: string | null 
     const onChange = () => reload()
     window.addEventListener('helios:reminders', onChange)
     return () => window.removeEventListener('helios:reminders', onChange)
-  }, [missionId, en])
+  }, [missionId, en, reload])
 
   useEffect(() => {
     if (typeof Notification !== 'undefined') setPerm(Notification.permission)

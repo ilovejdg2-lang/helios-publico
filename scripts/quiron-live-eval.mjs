@@ -1,4 +1,3 @@
-/* global process, console, AbortController */
 // Uses only synthetic in-memory records; no writes, real user records or secret output.
 import { resolve } from 'node:path'
 import { createRequire } from 'node:module'

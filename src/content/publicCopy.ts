@@ -87,6 +87,7 @@ const DOCS_EN: Record<string, { title: string; description: string; language: st
   architecture: { title: 'System architecture', description: 'Boundaries of the frontend, NestJS backend, local persistence, and simulator.', language: 'Spanish' },
   tests: { title: 'Prototype tests and validation', description: 'Plan and evidence for simulator tests and the demonstration experience.', language: 'Spanish' },
   references: { title: 'References and sources', description: 'Scientific documents and official portals used as design context.', language: 'Spanish' },
+  budget: { title: 'Detailed budget', description: 'Expanded HELIOS budget and economic feasibility document.', language: 'English' },
 }
 
 const SOURCES_EN: Record<string, Pick<DataSource, 'name' | 'type' | 'description' | 'useInHelios' | 'versionNote' | 'terms' | 'limitations'>> = {
@@ -296,7 +297,7 @@ export function publicNav(lang: Lang) {
 
 export function publicStages(lang: Lang) {
   return STAGES.map((stage, index) => {
-    const english = STAGES_EN[index]
+    const english = STAGES_EN[index]!
     const enStage = {
       id: stage.id,
       title: english.title,

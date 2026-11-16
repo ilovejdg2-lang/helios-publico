@@ -2,6 +2,7 @@ import { Download, Eye, FileText } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
+import { DocumentPreviewDialog, type PreviewDoc } from '../../components/public/DocumentPreviewDialog'
 import { Reveal } from '../../components/public/Reveal'
 import { TiltCard } from '../../components/public/TiltCard'
 import { publicDocs } from '../../content/publicCopy'
@@ -16,6 +17,7 @@ export function DocumentosPage() {
   const docs = publicDocs(lang)
   const formats = useMemo(() => ['all', ...Array.from(new Set(docs.map((d) => d.format)))], [docs])
   const [filter, setFilter] = useState('all')
+  const [preview, setPreview] = useState<PreviewDoc | null>(null)
   const visible = filter === 'all' ? docs : docs.filter((d) => d.format === filter)
 
   useEffect(() => {
@@ -49,44 +51,65 @@ export function DocumentosPage() {
       </div>
 
       <div className="docs-grid">
-        {visible.map((doc, index) => (
-          <TiltCard key={doc.id} as="article" className="doc-card" reduced={reduced}>
-            <motion.div
-              className="doc-icon"
-              aria-hidden="true"
-              animate={reduced ? undefined : { y: [0, -4, 0] }}
-              transition={{ duration: 3.2 + index * 0.2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <FileText size={22} strokeWidth={1.75} />
-            </motion.div>
-            <div className="doc-meta">
-              <span className="pill">{doc.format}</span>
-              <span className="pill lilac">{doc.language}</span>
-              {doc.status === 'soon' ? (
-                <span className="pill warn">{en ? 'Coming soon' : 'Próximamente'}</span>
-              ) : (
-                <span className="pill rose">{en ? 'Available' : 'Disponible'}</span>
-              )}
-            </div>
-            <h2 style={{ margin: 0, fontSize: '1.25rem' }}>{doc.title}</h2>
-            <p className="pub-muted" style={{ margin: 0 }}>{doc.description}</p>
-            {doc.href ? (
-              <div className="team-actions">
-                <a className="pub-btn-ghost" href={doc.href} target="_blank" rel="noreferrer">
-                  <Eye size={16} aria-hidden="true" /> {en ? 'View' : 'Ver'}
-                </a>
-                <a className="pub-btn-ghost" href={doc.href} download>
-                  <Download size={16} aria-hidden="true" /> {en ? 'Download' : 'Descargar'}
-                </a>
+        {visible.map((doc, index) => {
+          const href = doc.href
+          const isDocx = Boolean(href && href.toLowerCase().endsWith('.docx'))
+          return (
+            <TiltCard key={doc.id} as="article" className="doc-card" reduced={reduced}>
+              <motion.div
+                className="doc-icon"
+                aria-hidden="true"
+                animate={reduced ? undefined : { y: [0, -4, 0] }}
+                transition={{ duration: 3.2 + index * 0.2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <FileText size={22} strokeWidth={1.75} />
+              </motion.div>
+              <div className="doc-meta">
+                <span className="pill">{doc.format}</span>
+                <span className="pill lilac">{doc.language}</span>
+                {doc.status === 'soon' ? (
+                  <span className="pill warn">{en ? 'Coming soon' : 'Próximamente'}</span>
+                ) : (
+                  <span className="pill rose">{en ? 'Available' : 'Disponible'}</span>
+                )}
               </div>
-            ) : (
-              <p className="pub-muted" style={{ margin: 0, fontSize: '0.9rem' }}>
-                {en ? 'File pending publication.' : 'Archivo pendiente de publicación.'}
-              </p>
-            )}
-          </TiltCard>
-        ))}
+              <h2 style={{ margin: 0, fontSize: '1.25rem' }}>{doc.title}</h2>
+              <p className="pub-muted" style={{ margin: 0 }}>{doc.description}</p>
+              {href ? (
+                <div className="team-actions">
+                  {isDocx ? (
+                    <button
+                      type="button"
+                      className="pub-btn-ghost"
+                      onClick={() => setPreview({ title: doc.title, href })}
+                    >
+                      <Eye size={16} aria-hidden="true" /> {en ? 'View' : 'Ver'}
+                    </button>
+                  ) : (
+                    <a className="pub-btn-ghost" href={href} target="_blank" rel="noreferrer">
+                      <Eye size={16} aria-hidden="true" /> {en ? 'View' : 'Ver'}
+                    </a>
+                  )}
+                  <a className="pub-btn-ghost" href={href} download>
+                    <Download size={16} aria-hidden="true" /> {en ? 'Download' : 'Descargar'}
+                  </a>
+                </div>
+              ) : (
+                <p className="pub-muted" style={{ margin: 0, fontSize: '0.9rem' }}>
+                  {en ? 'File pending publication.' : 'Archivo pendiente de publicación.'}
+                </p>
+              )}
+            </TiltCard>
+          )
+        })}
       </div>
+
+      <DocumentPreviewDialog
+        doc={preview}
+        open={Boolean(preview)}
+        onOpenChange={(next) => { if (!next) setPreview(null) }}
+        en={en}
+      />
 
       {visible.length === 0 ? (
         <Reveal>

@@ -18,3 +18,6 @@ tsconfig.server.tsbuildinfo
 
 .vercel
 .cursor
+
+# Local Netlify folder
+.netlify

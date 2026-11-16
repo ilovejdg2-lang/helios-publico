@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BodyMap } from '../../components/health/BodyMap'
 import { HealthIndicatorsPanel } from '../../components/health/HealthIndicatorsPanel'
@@ -17,14 +17,11 @@ import { useMissionWorkspace } from './useMissionWorkspace'
 
 type GrantRow = PlatformGrant & { id: string; granteeProfileId: string; categories: string[] }
 type SymptomRow = { description?: string; bodyRegion?: string | null; createdAt?: number }
-type ApptRow = { id: string; specialty?: string; status?: string; reason?: string }
+type ApptRow = { status?: string }
 
 export function MyHealthPage() {
   const { lang } = useLocale()
   const en = lang === 'en'
-  useEffect(() => {
-    document.title = en ? 'HELIOS · My Health' : 'HELIOS · Mi salud'
-  }, [en])
   const {
     missionId,
     detail,
@@ -38,7 +35,6 @@ export function MyHealthPage() {
     loading,
     refresh,
   } = useMissionWorkspace()
-
   const [indicators, setIndicators] = useState<HealthIndicatorReading[]>([])
   const [urgentNote, setUrgentNote] = useState('')
   const [grantBusy, setGrantBusy] = useState(false)
@@ -49,54 +45,65 @@ export function MyHealthPage() {
     try { return Number(localStorage.getItem('helios.progress.records') || '0') } catch { return 0 }
   })
 
-  async function reloadIndicators() {
+  useEffect(() => {
+    document.title = en ? 'HELIOS · My health' : 'HELIOS · Mi salud'
+  }, [en])
+
+  const reloadIndicators = useCallback(async () => {
     if (!missionId) return
     const data = await platformApi.listIndicators(missionId)
     setIndicators(data.items)
     try { setRecordCount(Number(localStorage.getItem('helios.progress.records') || '0')) } catch { /* ignore */ }
-  }
+  }, [missionId])
 
   useEffect(() => {
     void reloadIndicators().catch(() => undefined)
-  }, [missionId])
+  }, [reloadIndicators])
 
   const routine = useMemo(() => {
-    const items: { id: string; label: string; status: 'pending' | 'done' | 'overdue' }[] = []
-    const wakeDone = Boolean(wakeNote && !/incomplete|sin completar|pending/i.test(wakeNote))
-    items.push({
-      id: 'wake',
-      label: en ? 'Post-wake check-in' : 'Chequeo después del despertar',
-      status: wakeDone ? 'done' : 'pending',
-    })
-    items.push({
-      id: 'sleep',
-      label: en ? 'Rest / sleep log' : 'Descanso / sueño',
-      status: indicators.some((i) => i.kind === 'sleep_hours') ? 'done' : 'pending',
-    })
-    const openAppts = (appointments as ApptRow[]).filter((a) => a.status === 'requested' || a.status === 'pending_confirm')
-    items.push({
-      id: 'appts',
-      label: en ? 'Pending appointments' : 'Citas pendientes',
-      status: openAppts.length ? 'overdue' : 'done',
-    })
-    items.push({
-      id: 'follow',
-      label: en ? 'Professional follow-ups / shared summaries' : 'Seguimientos / resúmenes compartidos',
-      status: 'pending',
-    })
-    return items
-  }, [wakeNote, indicators, appointments, en])
+    const openAppointments = (appointments as ApptRow[]).filter(
+      (item) => item.status === 'requested' || item.status === 'pending_confirm',
+    )
+    return [
+      {
+        id: 'wake',
+        label: en ? 'Post-wake check-in' : 'Chequeo después del despertar',
+        status: wakeNote && !/incomplete|sin completar|pending/i.test(wakeNote) ? 'done' : 'pending',
+      },
+      {
+        id: 'sleep',
+        label: en ? 'Rest / sleep log' : 'Descanso / sueño',
+        status: indicators.some((item) => item.kind === 'sleep_hours') ? 'done' : 'pending',
+      },
+      {
+        id: 'appointments',
+        label: en ? 'Pending appointments' : 'Citas pendientes',
+        status: openAppointments.length ? 'overdue' : 'done',
+      },
+    ] as const
+  }, [appointments, en, indicators, wakeNote])
 
-  const medicId = detail?.members.find((m) => m.role === 'medic' && m.status === 'active')?.profileId
-  const psychId = detail?.members.find((m) => m.role === 'psychologist' && m.status === 'active')?.profileId
-  const env = detail?.mission.environment || 'space_station'
+  const medicId = detail?.members.find((member) => member.role === 'medic' && member.status === 'active')?.profileId
+  const psychId = detail?.members.find((member) => member.role === 'psychologist' && member.status === 'active')?.profileId
+  const environment = detail?.mission.environment || 'space_station'
+
+  async function shareWith(profileId: string | undefined, categories: string[], note: string) {
+    if (!missionId || !profileId) return
+    setGrantBusy(true)
+    try {
+      await platformApi.grant(missionId, { granteeProfileId: profileId, categories, scopeNote: note })
+      await refresh({ silent: true })
+    } finally {
+      setGrantBusy(false)
+    }
+  }
 
   return (
     <div className="rd rd-crew">
       <div className="rd-bg" aria-hidden="true"><CrewArt /></div>
       <header className="rd-head">
         <p className="rd-kicker">{en ? 'Personal space' : 'Espacio personal'}</p>
-        <h1>{en ? 'My Health' : 'Mi salud'}</h1>
+        <h1>{en ? 'My health' : 'Mi salud'}</h1>
         <RoleContextBar
           missionName={detail?.mission.name}
           stage={detail?.mission.stage}
@@ -106,8 +113,8 @@ export function MyHealthPage() {
         />
         <p className="rd-muted">
           {en
-            ? `Mission environment: ${env.replace('_', ' ')} · Professional workspace (${role ? roleLabel(role, true) : '—'}) stays separate from these personal records.`
-            : `Entorno de misión: ${env.replace('_', ' ')} · El espacio profesional (${role ? roleLabel(role, false) : '—'}) permanece separado de estos registros personales.`}
+            ? `Mission environment: ${environment.replace('_', ' ')} · Professional workspace (${role ? roleLabel(role, true) : '—'}) stays separate from these personal records.`
+            : `Entorno de misión: ${environment.replace('_', ' ')} · El espacio profesional (${role ? roleLabel(role, false) : '—'}) permanece separado de estos registros personales.`}
         </p>
         <div className="rd-actions">
           <Link className="rd-btn ghost" to="/app">{en ? 'Back to workspace' : 'Volver al espacio'}</Link>
@@ -117,6 +124,8 @@ export function MyHealthPage() {
       </header>
 
       {loading ? <p className="rd-muted">{en ? 'Loading…' : 'Cargando…'}</p> : null}
+      <OfflineSyncBar />
+      <MissionRemindersPanel missionId={missionId} />
 
       <section className="rd-card">
         <h2>{en ? 'Mission routine' : 'Rutina de misión'}</h2>
@@ -125,7 +134,9 @@ export function MyHealthPage() {
             <li key={item.id}>
               <strong>{item.label}</strong>
               {' · '}
-              {item.status === 'done' ? (en ? 'Done' : 'Hecho') : item.status === 'overdue' ? (en ? 'Pending / overdue' : 'Pendiente / vencido') : (en ? 'Pending' : 'Pendiente')}
+              {item.status === 'done' ? (en ? 'Done' : 'Hecho') : item.status === 'overdue'
+                ? (en ? 'Pending / overdue' : 'Pendiente / vencido')
+                : (en ? 'Pending' : 'Pendiente')}
             </li>
           ))}
         </ul>
@@ -145,18 +156,15 @@ export function MyHealthPage() {
           await refresh({ silent: true })
         }}
       />
+      <PlatformIndicatorCharts missionId={missionId} />
+      <BodyMap indicators={indicators} symptoms={symptoms as SymptomRow[]} />
 
-      <BodyMap
-        indicators={indicators}
-        symptoms={symptoms as SymptomRow[]}
-      />
-
-      <section className="rd-card">
-        <h2>{en ? 'Act: appointments, grants & urgent help' : 'Actuar: citas, permisos y ayuda urgente'}</h2>
+      <section className="rd-card" data-testid="consent-demo">
+        <h2>{en ? 'Appointments, sharing & urgent help' : 'Citas, permisos y ayuda urgente'}</h2>
         <p className="rd-muted">
           {en
-            ? `Appointments: ${appointments.length} · Grants: ${grants.length}. Urgent cases are not resolved with a future appointment alone.`
-            : `Citas: ${appointments.length} · Permisos: ${grants.length}. Los casos urgentes no se resuelven solo con una cita futura.`}
+            ? `Appointments: ${appointments.length} · Active grants: ${(grants as GrantRow[]).filter(isActiveGrant).length}.`
+            : `Citas: ${appointments.length} · Permisos activos: ${(grants as GrantRow[]).filter(isActiveGrant).length}.`}
         </p>
         <div className="rd-actions">
           <button
@@ -168,14 +176,12 @@ export function MyHealthPage() {
               await platformApi.requestAppointment(missionId, {
                 specialty: 'medico',
                 reason: en ? 'Non-urgent follow-up' : 'Seguimiento no urgente',
-      <PlatformIndicatorCharts missionId={missionId} />
-
-      <section className="rd-card" data-testid="consent-demo">
-        <h2>{en ? 'Act: appointments, grants & urgent help' : 'Actuar: citas, permisos y ayuda urgente'}</h2>
-        <p className="rd-muted">
-          {en
-            ? `Judge path: Share vitals with medic → switch to Sofía (medic) → Revoke here → medic sees “Ask access”. Appointments: ${appointments.length} · Active grants: ${(grants as GrantRow[]).filter(isActiveGrant).length}.`
-            : `Ruta jurado: Compartir vitales con médica → cambiar a Sofía (médica) → Revocar aquí → médica ve “Pedir acceso”. Citas: ${appointments.length} · Permisos activos: ${(grants as GrantRow[]).filter(isActiveGrant).length}.`}
+                modality: 'aboard',
+              })
+              await refresh({ silent: true })
+            })()}
+          >
+            {en ? 'Request medical appointment' : 'Solicitar cita médica'}
           </button>
           <button
             type="button"
@@ -185,32 +191,23 @@ export function MyHealthPage() {
               if (!missionId) return
               await platformApi.requestAppointment(missionId, {
                 specialty: 'psicologo',
-                reason: en ? 'Emotional support (can wait)' : 'Apoyo emocional (puede esperar)',
+                reason: en ? 'Emotional support' : 'Apoyo emocional',
                 modality: 'aboard',
               })
               await refresh({ silent: true })
             })()}
           >
-            {en ? 'Psychological Consultation' : 'Consulta psicológica'}
+            {en ? 'Request psychology appointment' : 'Solicitar cita psicológica'}
           </button>
           <button
             type="button"
             className="rd-btn"
             disabled={!missionId || !medicId || grantBusy}
-            onClick={() => void (async () => {
-              if (!missionId || !medicId) return
-              setGrantBusy(true)
-              try {
-                await platformApi.grant(missionId, {
-                  granteeProfileId: medicId,
-                  categories: ['vitals', 'symptoms', 'sleep'],
-                  scopeNote: en ? 'Crew-authorized share for mission medic' : 'Compartido por el tripulante con médica de misión',
-                })
-                await refresh({ silent: true })
-              } finally {
-                setGrantBusy(false)
-              }
-            })()}
+            onClick={() => void shareWith(
+              medicId,
+              ['vitals', 'symptoms', 'sleep'],
+              en ? 'Crew-authorized share for mission medic' : 'Compartido con médica de misión',
+            )}
           >
             {en ? 'Share vitals with medic' : 'Compartir vitales con médica'}
           </button>
@@ -218,20 +215,11 @@ export function MyHealthPage() {
             type="button"
             className="rd-btn ghost"
             disabled={!missionId || !psychId || grantBusy}
-            onClick={() => void (async () => {
-              if (!missionId || !psychId) return
-              setGrantBusy(true)
-              try {
-                await platformApi.grant(missionId, {
-                  granteeProfileId: psychId,
-                  categories: ['symptoms', 'sleep'],
-                  scopeNote: en ? 'Crew-authorized share for psychologist' : 'Compartido por el tripulante con psicología',
-                })
-                await refresh({ silent: true })
-              } finally {
-                setGrantBusy(false)
-              }
-            })()}
+            onClick={() => void shareWith(
+              psychId,
+              ['symptoms', 'sleep'],
+              en ? 'Crew-authorized share for psychologist' : 'Compartido con psicología',
+            )}
           >
             {en ? 'Share with psychologist' : 'Compartir con psicología'}
           </button>
@@ -242,10 +230,10 @@ export function MyHealthPage() {
             disabled={!missionId}
             onClick={() => void (async () => {
               if (!missionId) return
-              const result = await platformApi.urgent(missionId) as { limitation?: string; requested?: boolean }
+              const result = await platformApi.urgent(missionId) as { limitation?: string }
               setUrgentNote(result.limitation || (en
-                ? 'Urgent flow opened. Follow the versioned protocol and human contact — do not wait for a future slot alone.'
-                : 'Flujo urgente abierto. Seguí el protocolo versionado y el contacto humano — no esperes solo una cita futura.'))
+                ? 'Urgent flow opened. Follow the versioned protocol and human contact.'
+                : 'Flujo urgente abierto. Seguí el protocolo versionado y el contacto humano.'))
               window.dispatchEvent(new CustomEvent('helios:quiron-care', { detail: { topic: 'physical' } }))
               await refresh({ silent: true })
             })()}
@@ -255,14 +243,16 @@ export function MyHealthPage() {
         </div>
         {urgentNote ? <p className="rd-ok" role="status">{urgentNote}</p> : null}
         <ul className="health-mini-list">
-          {(grants as GrantRow[]).filter((g) => !g.revokedAt).slice(0, 8).map((g) => (
-            <li key={g.id}>
-              {en ? 'Grant to' : 'Permiso a'} {g.granteeProfileId} · {(g.categories || []).join(', ')}
+          {(grants as GrantRow[]).filter(isActiveGrant).map((grant) => (
+            <li key={grant.id}>
+              <strong>{profileDisplayName(grant.granteeProfileId)}</strong>
+              {' · '}
+              {(grant.categories || []).join(', ') || (en ? 'categories n/a' : 'sin categorías')}
               <button
                 type="button"
                 className="rd-btn ghost"
                 style={{ marginLeft: 8 }}
-                onClick={() => void platformApi.revokeGrant(g.id).then(() => refresh({ silent: true }))}
+                onClick={() => void platformApi.revokeGrant(grant.id).then(() => refresh({ silent: true }))}
               >
                 {en ? 'Revoke' : 'Revocar'}
               </button>
@@ -271,42 +261,22 @@ export function MyHealthPage() {
         </ul>
       </section>
 
-        <h3 style={{ margin: '14px 0 8px', fontSize: '0.95rem' }}>
-          {en ? 'Active consents (you can revoke anytime)' : 'Consentimientos activos (podés revocar cuando quieras)'}
-        </h3>
-        <ul className="health-mini-list">
-          {(grants as GrantRow[]).filter(isActiveGrant).slice(0, 8).map((g) => (
-            <li key={g.id}>
-              <strong>{profileDisplayName(g.granteeProfileId)}</strong>
-              {' · '}
-              {(g.categories || []).join(', ') || (en ? 'categories n/a' : 'sin categorías')}
-              {g.scopeNote ? <span className="rd-muted"> — {g.scopeNote}</span> : null}
-              <button
-                type="button"
-                className="rd-btn ghost"
-                style={{ marginLeft: 8 }}
-                data-testid={`revoke-grant-${g.id}`}
-                onClick={() => void platformApi.revokeGrant(g.id).then(() => refresh({ silent: true }))}
-              >
-                {en ? 'Revoke now' : 'Revocar ahora'}
-              </button>
-            </li>
-          ))}
-          {(grants as GrantRow[]).filter(isActiveGrant).length === 0 ? (
-            <li className="rd-muted">
-              {en
-                ? 'No active shares. Medic and psychologist cannot read your indicators until you grant.'
-                : 'Sin compartidos activos. Médica y psicología no pueden leer tus indicadores hasta que concedás.'}
-            </li>
-          ) : null}
+      <section className="rd-card">
+        <label className="rd-check">
+          <input
+            type="checkbox"
+            checked={progressOptOut}
+            onChange={(event) => {
+              const next = event.target.checked
+              setProgressOptOut(next)
               try { localStorage.setItem('helios.progress.optout', next ? '1' : '0') } catch { /* ignore */ }
             }}
           />
-          {en ? 'Disable progress cues' : 'Desactivar señales de progreso'}
+          <span>{en ? 'Disable progress cues' : 'Desactivar señales de progreso'}</span>
         </label>
-        {!progressOptOut ? (
-          <p>{en ? `Indicators logged (local cue): ${recordCount}` : `Indicadores registrados (señal local): ${recordCount}`}</p>
-        ) : null}
+        {!progressOptOut
+          ? <p>{en ? `Indicators logged (local cue): ${recordCount}` : `Indicadores registrados (señal local): ${recordCount}`}</p>
+          : null}
       </section>
     </div>
   )

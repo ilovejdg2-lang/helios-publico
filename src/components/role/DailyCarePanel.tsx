@@ -205,11 +205,6 @@ export function DailyCarePanel({
             className="rd-btn"
             disabled={busy || !symptom.trim() || !missionId}
             onClick={() => void run(async () => {
-              await platformApi.addSymptom(missionId!, {
-                description: symptom.trim(),
-                intensity: 3,
-                context: 'self',
-                source: 'self_report',
               const payload = {
                 description: symptom.trim(),
                 intensity: 3,
@@ -226,6 +221,10 @@ export function DailyCarePanel({
                   enqueueOfflineOp({ type: 'symptom', missionId: missionId!, payload })
                 }
               }
+            }, en ? 'Symptom saved' : 'Síntoma guardado')}
+          >
+            {en ? 'Save symptom' : 'Guardar síntoma'}
+          </button>
           <button
             type="button"
             className="rd-btn ghost"

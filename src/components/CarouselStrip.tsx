@@ -72,6 +72,7 @@ export function CarouselStrip({
         className={`carousel-track ${trackClassName}`.trim()}
         role="group"
         aria-label={label}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable track needs keyboard focus
         tabIndex={canPrev || canNext ? 0 : undefined}
       >
         {children}

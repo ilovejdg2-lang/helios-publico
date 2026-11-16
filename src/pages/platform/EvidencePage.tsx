@@ -77,7 +77,7 @@ export function EvidencePage() {
                   <a className="plat-btn ghost" href={item.docs} target="_blank" rel="noreferrer">
                     {en ? 'Official docs' : 'Docs oficiales'}
                   </a>
-                  <Link className="plat-btn ghost" to={item.ui.split(' · ')[0]}>
+                  <Link className="plat-btn ghost" to={item.ui.split(' · ')[0] || '/'}>
                     {en ? 'Open in HELIOS' : 'Abrir en HELIOS'}
                   </Link>
                 </div>

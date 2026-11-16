@@ -31,6 +31,8 @@ export function CareAiControls({ conversationId, messageCount, locale, state: _s
     onChange(AI_CARE)
     return () => {
       request.current?.abort()
+      // El grant se obtiene durante la conversación; se revoca el vigente al desmontar.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (grant.current) void revokeSpaceModel(grant.current)
       onChange(LOCAL_CARE)
     }

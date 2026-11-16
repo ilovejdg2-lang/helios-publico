@@ -1,4 +1,3 @@
-/* global process, console, AbortController */
 import { resolve, join, basename, dirname } from 'node:path'
 import { createRequire } from 'node:module'
 import { mkdtempSync, mkdirSync, appendFileSync, rmSync } from 'node:fs'
