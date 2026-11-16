@@ -80,13 +80,12 @@ const CAPABILITIES_EN = [
 ] as const
 
 const DOCS_EN: Record<string, { title: string; description: string; language: string }> = {
-  proposal: { title: 'Project proposal', description: 'Scope, problem, and vision of HELIOS as a support platform.', language: 'Spanish' },
-  presentation: { title: 'Presentation', description: 'Support material for demos and talks about the prototype.', language: 'Spanish' },
-  costs: { title: 'Costs', description: 'Quote and cost breakdown for the HELIOS project.', language: 'Spanish' },
-  technical: { title: 'Technical documentation', description: 'Contracts, commands, variables, and implementation decisions of the prototype.', language: 'Spanish' },
-  architecture: { title: 'System architecture', description: 'Boundaries of the frontend, NestJS backend, local persistence, and simulator.', language: 'Spanish' },
-  tests: { title: 'Prototype tests and validation', description: 'Plan and evidence for simulator tests and the demonstration experience.', language: 'Spanish' },
-  references: { title: 'References and sources', description: 'Scientific documents and official portals used as design context.', language: 'Spanish' },
+  proposal: { title: 'Project proposal', description: 'Scope, problem, and vision of HELIOS as a support platform.', language: 'English' },
+  presentation: { title: 'Presentation', description: 'Support material for demos and talks about the prototype.', language: 'English' },
+  costs: { title: 'Costs', description: 'Quote and cost breakdown for the HELIOS project.', language: 'English' },
+  architecture: { title: 'System architecture', description: 'Boundaries of the frontend, NestJS backend, local persistence, and simulator.', language: 'English' },
+  tests: { title: 'Prototype tests and validation', description: 'Plan and evidence for simulator tests and the demonstration experience.', language: 'English' },
+  references: { title: 'References and sources', description: 'Scientific documents and official portals used as design context.', language: 'English' },
   budget: { title: 'Detailed budget', description: 'Expanded HELIOS budget and economic feasibility document.', language: 'English' },
 }
 

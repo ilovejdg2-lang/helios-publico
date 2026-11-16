@@ -34,11 +34,21 @@ test('el visor no genera desplazamiento horizontal en móvil', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(2)
 })
 
-test('los PDF siguen abriéndose con el archivo original', async ({ page }) => {
+test('el PDF se visualiza dentro de HELIOS y conserva la descarga', async ({ page }) => {
   await page.goto('/documentos')
-
-  const pdfLink = page.locator('.doc-card a[href$=".pdf"]').first()
-  await expect(pdfLink).toBeVisible()
-  await expect(pdfLink).toHaveAttribute('target', '_blank')
-  await expect(pdfLink).toHaveAttribute('href', /\/docs\/.+\.pdf$/)
+  const card = page.locator('.doc-card').filter({ has: page.locator('a[href="/docs/ppt-helios.pdf"]') })
+  await card.getByRole('button').click()
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+  const canvas = dialog.locator('.pdf-preview-pages canvas').first()
+  await expect(canvas).toBeVisible({ timeout: 45_000 })
+  const colors = await canvas.evaluate((element) => {
+    const canvas = element as HTMLCanvasElement
+    const context = canvas.getContext('2d')!
+    return new Set(context.getImageData(0, 0, canvas.width, canvas.height).data).size
+  })
+  expect(colors).toBeGreaterThan(10)
+  await expect(dialog.locator('a[download]')).toHaveAttribute('href', '/docs/ppt-helios.pdf')
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
 })

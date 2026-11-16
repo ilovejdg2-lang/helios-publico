@@ -53,7 +53,7 @@ export function DocumentosPage() {
       <div className="docs-grid">
         {visible.map((doc, index) => {
           const href = doc.href
-          const isDocx = Boolean(href && href.toLowerCase().endsWith('.docx'))
+          const hasPreview = Boolean(href && /\.(docx|pdf)$/i.test(href))
           return (
             <TiltCard key={doc.id} as="article" className="doc-card" reduced={reduced}>
               <motion.div
@@ -77,7 +77,7 @@ export function DocumentosPage() {
               <p className="pub-muted" style={{ margin: 0 }}>{doc.description}</p>
               {href ? (
                 <div className="team-actions">
-                  {isDocx ? (
+                  {hasPreview ? (
                     <button
                       type="button"
                       className="pub-btn-ghost"

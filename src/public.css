@@ -1496,3 +1496,6 @@
 :root[data-theme="dark"] .highlight-item { color: #efedf4; }
 :root[data-theme="light"] .pub-kicker { color: #ac0036; }
 :root[data-theme] .sim-enter { background: #b3003a; color: #fff; }
+
+.pdf-preview-pages { display: grid; gap: 16px; padding: 16px; }
+.pdf-preview-pages canvas { display: block; width: 100%; height: auto; background: white; box-shadow: 0 2px 12px #0002; }

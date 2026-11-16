@@ -1,3 +1,4 @@
+import { PdfPreview } from './PdfPreview'
 import * as Dialog from '@radix-ui/react-dialog'
 import { AlertTriangle, Download, Loader2, RefreshCw, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -70,7 +71,7 @@ export function DocumentPreviewDialog({
   const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
-    if (!open || !doc) return
+    if (!open || !doc || doc.href.toLowerCase().endsWith('.pdf')) return
     const href = doc.href
     const controller = new AbortController()
     let cancelled = false
@@ -146,9 +147,11 @@ export function DocumentPreviewDialog({
           </header>
 
           <div className="doc-viewer-body">
-            <div ref={bodyRef} className="doc-viewer-doc" />
+            {open && doc?.href.toLowerCase().endsWith('.pdf') ? (
+              <PdfPreview href={doc.href} en={en} />
+            ) : <div ref={bodyRef} className="doc-viewer-doc" />}
 
-            {status !== 'ready' ? (
+            {!doc?.href.toLowerCase().endsWith('.pdf') && status !== 'ready' ? (
               <div className={`doc-viewer-status${status === 'error' ? ' is-error' : ''}`} role="status">
                 {status === 'loading' ? (
                   <>
