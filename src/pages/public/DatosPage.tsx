@@ -53,7 +53,7 @@ export function DatosPage() {
         </p>
         <p>
           {en
-            ? 'Challenge alignment matrix (what is API vs document vs user measurement): see repository docs/CHALLENGE-ALIGNMENT-MATRIX-2026.md. Live indicators in My health always show origin (manual / sensor / import / simulation).'
+            ? 'Challenge alignment matrix (what is API vs document vs user measurement): see repository docs/CHALLENGE-ALIGNMENT-MATRIX-2026.md. Live indicators in My Health always show origin (manual / sensor / import / simulation).'
             : 'Matriz de alineación del reto (API vs documento vs medición de usuario): docs/CHALLENGE-ALIGNMENT-MATRIX-2026.md. Los indicadores en Mi salud muestran siempre el origen (manual / sensor / importación / simulación).'}
         </p>
       </Reveal>

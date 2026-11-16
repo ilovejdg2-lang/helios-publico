@@ -37,11 +37,6 @@ export function PlatformIndicatorCharts({ missionId }: { missionId: string | nul
   return (
     <section className="rd-card" data-testid="platform-indicator-charts">
       <h2>{en ? 'Platform indicator history' : 'Historial de indicadores (platform)'}</h2>
-      <p className="rd-muted">
-        {en
-          ? 'Care-layer readings from Mi salud. Each chart uses a single unit — incompatible units are never mixed on one axis.'
-          : 'Lecturas de la capa de cuidado (Mi salud). Cada gráfico usa una sola unidad — nunca se mezclan unidades incompatibles en el mismo eje.'}
-      </p>
       {error ? <p className="rd-error" role="alert">{error}</p> : null}
       {kinds.length === 0 ? (
         <p className="rd-muted">{en ? 'No platform indicators to chart yet.' : 'Todavía no hay indicadores platform para graficar.'}</p>

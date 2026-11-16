@@ -6,7 +6,6 @@ import { MissionRemindersPanel } from '../../components/health/MissionRemindersP
 import { OfflineSyncBar } from '../../components/health/OfflineSyncBar'
 import { PlatformIndicatorCharts } from '../../components/health/PlatformIndicatorCharts'
 import { DailyCarePanel } from '../../components/role/DailyCarePanel'
-import { DEMO_REVIEW_PROTOCOL } from '../../domain/demoReviewProtocol'
 import { CrewArt } from '../../components/role/RoleArt'
 import { useLocale } from '../../i18n'
 import { platformApi, type HealthIndicatorReading } from '../../platform/api'
@@ -24,7 +23,7 @@ export function MyHealthPage() {
   const { lang } = useLocale()
   const en = lang === 'en'
   useEffect(() => {
-    document.title = en ? 'HELIOS · My health' : 'HELIOS · Mi salud'
+    document.title = en ? 'HELIOS · My Health' : 'HELIOS · Mi salud'
   }, [en])
   const {
     missionId,
@@ -97,7 +96,7 @@ export function MyHealthPage() {
       <div className="rd-bg" aria-hidden="true"><CrewArt /></div>
       <header className="rd-head">
         <p className="rd-kicker">{en ? 'Personal space' : 'Espacio personal'}</p>
-        <h1>{en ? 'My health' : 'Mi salud'}</h1>
+        <h1>{en ? 'My Health' : 'Mi salud'}</h1>
         <RoleContextBar
           missionName={detail?.mission.name}
           stage={detail?.mission.stage}
@@ -121,11 +120,6 @@ export function MyHealthPage() {
 
       <section className="rd-card">
         <h2>{en ? 'Mission routine' : 'Rutina de misión'}</h2>
-        <p className="rd-muted">
-          {en
-            ? 'Respects your wake time. An overdue reminder is pending work — not proof of illness or wellness.'
-            : 'Respeta tu hora de despertar. Un recordatorio vencido es pendiente — no prueba enfermedad ni bienestar.'}
-        </p>
         <ul className="health-mini-list">
           {routine.map((item) => (
             <li key={item.id}>
@@ -197,7 +191,7 @@ export function MyHealthPage() {
               await refresh({ silent: true })
             })()}
           >
-            {en ? 'Request psychology appointment' : 'Solicitar cita psicología'}
+            {en ? 'Psychological Consultation' : 'Consulta psicológica'}
           </button>
           <button
             type="button"

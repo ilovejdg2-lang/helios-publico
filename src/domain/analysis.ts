@@ -31,13 +31,13 @@ const LIMITATIONS_EN = [
 ];
 
 const STAGE_EN = {
-  preembarque: 'Pre-flight',
-  a_bordo: 'On board',
-  posmision: 'Post-mission',
+  preembarque: 'Preflight',
+  a_bordo: 'In Flight',
+  posmision: 'Completed',
 } as const;
 
 function stageName(stage: keyof typeof STAGE_EN): string {
-  return uiLang() === 'en' ? STAGE_EN[stage] : MISSION_STAGE_LABEL[stage];
+  return uiLang() === 'es' ? MISSION_STAGE_LABEL[stage] : STAGE_EN[stage];
 }
 
 const SYMPTOM_EN: Record<string, string> = {
@@ -228,7 +228,7 @@ export function answerLocal(
         .map((item) => `${item.title} (${PREP_STATUS_LABEL[item.status]})`)
         .join('; ') || (english ? 'none' : 'ninguno');
     summary = english
-      ? `Pre-flight. ${pending.length} item(s) still not ready: ${list}. Quirón Bot proposes categories; authorized staff approve products and quantities.`
+      ? `Preflight. ${pending.length} item(s) still not ready: ${list}. Quirón Bot proposes categories; authorized staff approve products and quantities.`
       : `Preembarque. ${pending.length} elemento(s) aún no listos: ${list}. Quirón Bot propone categorías; el personal autorizado aprueba productos y cantidades.`;
   } else if (
     normalized.includes('aprob') ||
@@ -255,7 +255,7 @@ export function answerLocal(
   ) {
     const open = state.episodes.filter((item) => item.status !== 'closed');
     summary = english
-      ? `Post-mission. Current stage: ${stageName(state.mission.stage)}. Episodes still open: ${open.length}. Changing stage does not close a pending follow-up. Recovery decisions belong to authorized staff.`
+      ? `Completed. Current stage: ${stageName(state.mission.stage)}. Episodes still open: ${open.length}. Changing stage does not close a pending follow-up. Recovery decisions belong to authorized staff.`
       : `Posmisión. Etapa actual: ${MISSION_STAGE_LABEL[state.mission.stage]}. Episodios aún abiertos: ${open.length}. Cambiar de etapa no cierra un seguimiento pendiente. Las decisiones de recuperación corresponden al personal autorizado.`;
   } else if (
     normalized.includes('riesgo') ||

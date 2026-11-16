@@ -43,15 +43,15 @@ export function quironContextLabel(state: AppState | null, locale: QuironPublicL
   const stage =
     locale === 'en'
       ? state.mission.stage === 'preembarque'
-        ? 'Pre-flight'
+        ? 'Preflight'
         : state.mission.stage === 'a_bordo'
-          ? 'Aboard'
-          : 'Post-mission'
+          ? 'In Flight'
+          : 'Completed'
       : state.mission.stage === 'preembarque'
         ? 'Preembarque'
         : state.mission.stage === 'a_bordo'
           ? 'A bordo'
-          : 'Posmisión'
+          : 'Finalizada'
   if (crew) return locale === 'en' ? `Context: ${crew.name} · ${stage}` : `Contexto: ${crew.name} · ${stage}`
   return locale === 'en' ? `Context: ${state.mission.name} · ${stage}` : `Contexto: ${state.mission.name} · ${stage}`
 }

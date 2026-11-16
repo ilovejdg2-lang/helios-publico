@@ -74,7 +74,7 @@ export function DailyCarePanel({
       {busy ? <p className="rd-muted" aria-live="polite">{en ? 'Saving…' : 'Guardando…'}</p> : null}
 
       <section className="rd-card">
-        <h2>{en ? 'Daily check-in' : 'Chequeo del día'}</h2>
+        <h2>{en ? 'Daily Check-in' : 'Chequeo diario'}</h2>
         <p className="rd-muted">
           {en ? 'Status:' : 'Estado:'}{' '}
           <strong>{wakeNote || (en ? 'Incomplete' : 'Sin completar')}</strong>

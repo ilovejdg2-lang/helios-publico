@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { HeliosLogo } from '../../components/HeliosLogo'
+import { LocaleThemeSwitch } from '../../components/LocaleThemeSwitch'
 import { MissionProcessStrip } from '../../components/platform/MissionProcessStrip'
 import { useLocale } from '../../i18n'
 import { platformApi, type MissionRow } from '../../platform/api'
-import { roleLabel, stageBlurb, stageLabel } from '../../platform/copy'
+import { MISSION_PROCESS_STEPS, roleLabel, stageBlurb, stageLabel } from '../../platform/copy'
 import { clearSession, getSessionToken, getStoredProfile, setActiveMissionId } from '../../platform/session'
 import {
   clearRoleScopedUiState,
@@ -15,6 +16,18 @@ import {
 } from '../../platform/workspace'
 import '../../platform/platform.css'
 
+type StageFilter = 'all' | (typeof MISSION_PROCESS_STEPS)[number]
+
+/** Una sola misión por etapa: la última de la lista, que es la más reciente. */
+function onePerStage(rows: MissionRow[]): MissionRow[] {
+  const latest = new Map<string, MissionRow>()
+  for (const row of rows) latest.set(row.mission.stage, row)
+  return MISSION_PROCESS_STEPS.flatMap((stage) => {
+    const row = latest.get(stage)
+    return row ? [row] : []
+  })
+}
+
 export function MissionsHubPage() {
   const navigate = useNavigate()
   const { lang } = useLocale()
@@ -22,8 +35,13 @@ export function MissionsHubPage() {
   const profile = getStoredProfile()
   const isChief = profile?.demoRole === 'chief'
   const [items, setItems] = useState<MissionRow[]>([])
+  const [stageFilter, setStageFilter] = useState<StageFilter>('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const visible = useMemo(() => {
+    const picked = onePerStage(items)
+    return stageFilter === 'all' ? picked : picked.filter((row) => row.mission.stage === stageFilter)
+  }, [items, stageFilter])
 
   useEffect(() => {
     document.title = en ? 'HELIOS · Missions' : 'HELIOS · Misiones'
@@ -80,18 +98,21 @@ export function MissionsHubPage() {
       <div className="plat-shell">
         <div className="plat-top">
           <HeliosLogo variant="wordmark" />
-          <div className="plat-actions">
-            <span className="plat-chip">{profile?.displayName}</span>
-            <button
-              type="button"
-              className="plat-btn ghost"
-              onClick={() => {
-                clearSession()
-                navigate('/entrar')
-              }}
-            >
-              {en ? 'Switch profile' : 'Cambiar perfil'}
-            </button>
+          <div className="plat-top-tools">
+            <LocaleThemeSwitch />
+            <div className="plat-actions">
+              <span className="plat-chip">{profile?.displayName}</span>
+              <button
+                type="button"
+                className="plat-btn ghost"
+                onClick={() => {
+                  clearSession()
+                  navigate('/entrar')
+                }}
+              >
+                {en ? 'Switch profile' : 'Cambiar perfil'}
+              </button>
+            </div>
           </div>
         </div>
         <p className="plat-kicker">{en ? 'Mission hub' : 'Hub de misiones'}</p>
@@ -119,12 +140,31 @@ export function MissionsHubPage() {
 
         <section className="plat-panel">
           <h2>{en ? 'Continue one of my missions' : 'Continuar una de mis misiones'}</h2>
-          {!loading && items.length === 0 ? (
-            <p>{en ? 'You have no active missions yet.' : 'Todavía no tenés misiones activas.'}</p>
+          <div className="mission-hub-filters" role="group" aria-label={en ? 'Filter by stage' : 'Filtrar por etapa'}>
+            <button type="button" aria-pressed={stageFilter === 'all'} onClick={() => setStageFilter('all')}>
+              {en ? 'All' : 'Todas'}
+            </button>
+            {MISSION_PROCESS_STEPS.map((stage) => (
+              <button
+                key={stage}
+                type="button"
+                aria-pressed={stageFilter === stage}
+                onClick={() => setStageFilter(stage)}
+              >
+                {stageLabel(stage, en)}
+              </button>
+            ))}
+          </div>
+          {!loading && visible.length === 0 ? (
+            <p>
+              {items.length === 0
+                ? (en ? 'You have no active missions yet.' : 'Todavía no tenés misiones activas.')
+                : (en ? 'No mission in this stage.' : 'No hay una misión en esta etapa.')}
+            </p>
           ) : null}
           {error ? <p className="plat-error">{error}</p> : null}
           <div className="plat-list mission-hub-list">
-            {items.map((row) => {
+            {visible.map((row) => {
               const pct = Number(row.mission.prepPercent) || 0
               return (
                 <article className="mission-hub-card" key={row.mission.id}>
@@ -142,7 +182,7 @@ export function MissionsHubPage() {
                     </div>
                     <div className="mission-hub-prep">
                       <div className="mission-hub-prep-top">
-                        <span>{en ? 'Prep checklist' : 'Checklist de preparación'}</span>
+                        <span>{en ? 'Preparation Checklist' : 'Checklist de preparación'}</span>
                         <strong className={pct >= 80 ? 'is-ok' : undefined}>{pct}%</strong>
                       </div>
                       <div className="mission-hub-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>

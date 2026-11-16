@@ -92,9 +92,9 @@ export function ResourcesPage() {
           ) : null}
         </div>
         <p className="inv-lede">
-          {en ? 'Reusable equipment is not deducted when used. A supply cannot go below zero.' : 'El equipo reutilizable no se descuenta al usarlo. Un suministro no puede quedar'}
-          <br />
-          {en ? 'Having it on board is not a medical indication.' : 'bajo cero. Tenerlo a bordo no es una indicación médica.'}
+          {en
+            ? 'Reusable equipment is not deducted when used. A supply cannot go below zero. Having it on board is not a medical indication.'
+            : 'El equipo reutilizable no se descuenta al usarlo. Un suministro no puede quedar bajo cero. Tenerlo a bordo no es una indicación médica.'}
         </p>
       </header>
       <div className="inv-cats" role="tablist" aria-label={en ? 'Categories' : 'Categorías'}>

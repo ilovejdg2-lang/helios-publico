@@ -1,9 +1,9 @@
 export function roleLabel(role: string, en: boolean): string {
   const map: Record<string, [string, string]> = {
-    chief: ['Chief', 'Jefe'],
-    crew: ['Crew member', 'Tripulante'],
-    medic: ['Medic (simulated)', 'Médico (simulado)'],
-    psychologist: ['Psychologist (simulated)', 'Psicólogo (simulado)'],
+    chief: ['Mission Commander', 'Comandante de misión'],
+    crew: ['Crew Member', 'Tripulante'],
+    medic: ['Physician', 'Médico'],
+    psychologist: ['Psychologist', 'Psicólogo'],
     ops: ['Operations', 'Operaciones'],
   }
   const pair = map[role]
@@ -25,10 +25,10 @@ export function profileDisplayName(profileId: string): string {
 
 export function profileTitle(profile: { id: string; title: string }, en: boolean): string {
   const byId: Record<string, [string, string]> = {
-    'elena-torres': ['Mission chief (demo)', 'Jefa de misión (demo)'],
-    'mateo-ruiz': ['Crew member (demo)', 'Tripulante (demo)'],
-    'sofia-chen': ['Simulated medic (demo)', 'Médica simulada (demo)'],
-    'alex-morgan': ['Simulated psychologist (demo)', 'Psicólogo simulado (demo)'],
+    'elena-torres': ['Mission Commander (demo)', 'Comandante de misión (demo)'],
+    'mateo-ruiz': ['Crew Member (demo)', 'Tripulante (demo)'],
+    'sofia-chen': ['Physician (demo)', 'Médica (demo)'],
+    'alex-morgan': ['Psychologist (demo)', 'Psicólogo (demo)'],
     'ops-desk': ['Operations / prep (demo)', 'Operaciones / preparación (demo)'],
   }
   const pair = byId[profile.id]
@@ -39,9 +39,9 @@ export function profileTitle(profile: { id: string; title: string }, en: boolean
 export function stageLabel(stage: string, en: boolean): string {
   const map: Record<string, [string, string]> = {
     draft: ['Draft', 'Borrador'],
-    preflight: ['Pre-flight', 'Preembarque'],
-    aboard: ['Aboard', 'A bordo'],
-    postmission: ['Post-mission', 'Posmisión'],
+    preflight: ['Preflight', 'Preembarque'],
+    aboard: ['In Flight', 'A bordo'],
+    postmission: ['Completed', 'Finalizada'],
     archived: ['Archived', 'Archivada'],
     cancelled: ['Cancelled', 'Cancelada'],
   }
@@ -55,9 +55,9 @@ export const MISSION_PROCESS_STEPS = ['draft', 'preflight', 'aboard', 'postmissi
 export function stageBlurb(stage: string, en: boolean): string {
   const map: Record<string, [string, string]> = {
     draft: ['Planning the mission size and duration.', 'Definiendo tamaño de tripulación y duración.'],
-    preflight: ['Boarding prep: checklist before takeoff.', 'Preembarque: checklist antes de despegar.'],
-    aboard: ['Mission underway on board.', 'Misión en curso a bordo.'],
-    postmission: ['Return and review.', 'Regreso y revisión.'],
+    preflight: ['Preflight: crew, resources, and the Preparation Checklist.', 'Preembarque: tripulación, recursos y lista de preparación.'],
+    aboard: ['In Flight: the mission is underway.', 'A bordo: la misión está en curso.'],
+    postmission: ['Completed: history, analysis, and recommendations.', 'Finalizada: historial, análisis y recomendaciones.'],
     archived: ['Archived mission.', 'Misión archivada.'],
     cancelled: ['Cancelled mission.', 'Misión cancelada.'],
   }

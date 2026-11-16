@@ -79,8 +79,8 @@ export function PsychHome() {
           </ul>
         )}
         <div className="rd-actions">
-          <Link className="rd-btn" to="/app/mi-salud">{en ? 'My health / schedule' : 'Mi salud / agenda'}</Link>
-          <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My health' : 'Ver mi salud'}</Link>
+          <Link className="rd-btn" to="/app/mi-salud">{en ? 'My Health / schedule' : 'Mi salud / agenda'}</Link>
+          <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My Health' : 'Ver mi salud'}</Link>
         </div>
       </section>
 

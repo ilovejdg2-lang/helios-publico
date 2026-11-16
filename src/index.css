@@ -301,6 +301,7 @@ a.brand-mark:hover { background: color-mix(in srgb, var(--accent) 8%, transparen
   background: var(--surface); color: var(--ink); display: inline-grid; place-items: center;
 }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.locale-theme { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .notice-float { pointer-events: none; }
 .workspace-monitor .notice-float .callout {
   max-width: 420px; margin-left: auto; opacity: 0.92;
@@ -1032,7 +1033,14 @@ html.tab-hidden .skeleton { animation: none; }
   opacity: 0.72;
 }
 @media (min-width: 1024px) {
-  .shell.is-alerts .topbar { display: none; }
+  .shell.is-alerts .topbar {
+    display: flex; justify-content: flex-end;
+    position: absolute; top: 0; right: 0; left: auto; width: auto; z-index: 4;
+    padding: 22px 40px 0; background: transparent; pointer-events: none;
+  }
+  .shell.is-alerts .topbar-pills,
+  .shell.is-alerts .mobile-brand { display: none; }
+  .shell.is-alerts .top-actions { pointer-events: auto; }
   .shell.is-alerts .content { padding: 72px 40px 36px 49px; }
 }
 .alerts-page { position: relative; z-index: 1; display: grid; gap: 0; max-width: none; min-width: 0; }
@@ -1666,8 +1674,7 @@ html.tab-hidden .skeleton { animation: none; }
   opacity: 0.72;
 }
 @media (min-width: 1024px) {
-  .shell.is-resources .demo-pill,
-  .shell.is-resources .top-actions { display: none; }
+  .shell.is-resources .demo-pill { display: none; }
   .shell.is-resources .topbar { padding: 26px 48px 0 52px; }
   .shell.is-resources .content { padding: 78px 48px 28px 52px; }
 }
@@ -2004,8 +2011,7 @@ html.tab-hidden .skeleton { animation: none; }
 :root[data-theme="dark"] .hist-filters select,
 :root[data-theme="dark"] .hist-tip { background: #241c18; color: #f6f1ea; }
 @media (min-width: 1024px) {
-  .shell.is-history .demo-pill,
-  .shell.is-history .top-actions { display: none; }
+  .shell.is-history .demo-pill { display: none; }
   .shell.is-history .topbar { padding: 26px 48px 0 74px; }
   .shell.is-history .content { padding: 72px 45px 28px 74px; }
 }
@@ -2079,8 +2085,7 @@ html.tab-hidden .skeleton { animation: none; }
 :root[data-theme="dark"] .an-card h3 { color: #f7f1f4; }
 :root[data-theme="dark"] .an-card { background: #241c22; }
 @media (min-width: 1024px) {
-  .shell.is-analysis .demo-pill,
-  .shell.is-analysis .top-actions { display: none; }
+  .shell.is-analysis .demo-pill { display: none; }
   .shell.is-analysis .topbar { padding: 26px 70px 0 60px; }
   .shell.is-analysis .content { padding: 52px 70px 36px 60px; }
 }
@@ -2167,8 +2172,7 @@ html.tab-hidden .skeleton { animation: none; }
 :root[data-theme="dark"] .med-panel .field input,
 :root[data-theme="dark"] .med-panel .field textarea { background: #241c28; color: #f4f1f6; }
 @media (min-width: 1024px) {
-  .shell.is-medical .demo-pill,
-  .shell.is-medical .top-actions { display: none; }
+  .shell.is-medical .demo-pill { display: none; }
   .shell.is-medical .topbar { padding: 26px 52px 0 63px; }
   .shell.is-medical .content { padding: 105px 52px 36px 63px; }
 }

@@ -8,7 +8,6 @@ import {
   stateLabel,
   type IndicatorVisualState,
 } from '../../domain/healthIndicators'
-import { DEMO_REVIEW_PROTOCOL, protocolBadge } from '../../domain/demoReviewProtocol'
 import {
   platformApi,
   type HealthIndicatorReading,
@@ -139,14 +138,6 @@ export function HealthIndicatorsPanel({
 
       <section className="rd-card">
         <h2>{en ? 'Log health indicators' : 'Registrar indicadores'}</h2>
-        <p className="rd-muted">
-          {en
-            ? 'Manual entry works without physical sensors. Origins: manual, sensor, import or simulation — never unlabeled.'
-            : 'La entrada manual funciona sin sensores físicos. Orígenes: manual, sensor, importación o simulación — siempre etiquetados.'}
-        </p>
-        <p className="rd-muted">
-          {protocolBadge(en)}. {en ? DEMO_REVIEW_PROTOCOL.disclaimer.en : DEMO_REVIEW_PROTOCOL.disclaimer.es}
-        </p>
         <div className="rd-form-grid">
           <div className="rd-field">
             <label htmlFor="ind-kind">{en ? 'Indicator' : 'Indicador'}</label>
@@ -259,11 +250,6 @@ export function HealthIndicatorsPanel({
             </select>
           </label>
         </div>
-        <p className="rd-muted">
-          {en
-            ? 'Baseline pending until enough personal history exists — HELIOS does not invent clinical baselines.'
-            : 'Línea base pendiente hasta haber historial personal suficiente — HELIOS no inventa líneas base clínicas.'}
-        </p>
         <div className="health-card-grid">
           {INDICATOR_CATALOG.map((entry) => {
             const series = (byKind.get(entry.kind) || []).filter((item) => Date.now() - item.measuredAt <= periodMs)
@@ -279,16 +265,11 @@ export function HealthIndicatorsPanel({
                 <p className="health-value">
                   {latest ? formatIndicatorValue(latest, en) : (en ? 'No data' : 'Sin datos')}
                 </p>
-                <p className="rd-muted">
-                  {latest
-                    ? `${new Date(latest.measuredAt).toLocaleString()} · ${latest.origin} · ${latest.quality}`
-                    : (en ? 'Unit: ' : 'Unidad: ') + entry.unit}
-                </p>
-                <p className="rd-muted">{en ? evalState.reason.en : evalState.reason.es}</p>
-                <p className="rd-muted" style={{ fontSize: '0.78rem' }}>
-                  {evalState.protocolId}{evalState.ruleId ? `/${evalState.ruleId}` : ''}
-                </p>
-                <p><strong>{en ? 'Next step:' : 'Siguiente paso:'}</strong> {en ? evalState.nextStep.en : evalState.nextStep.es}</p>
+                {latest ? (
+                  <p className="rd-muted">
+                    {new Date(latest.measuredAt).toLocaleString()} · {latest.origin} · {latest.quality}
+                  </p>
+                ) : null}
                 <button type="button" className="rd-btn ghost" onClick={() => setExplainKind(entry.kind)}>
                   {en ? 'Understand' : 'Entender'}
                 </button>

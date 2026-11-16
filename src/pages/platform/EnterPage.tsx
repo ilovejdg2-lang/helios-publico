@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { HeliosLogo } from '../../components/HeliosLogo'
+import { LocaleThemeSwitch } from '../../components/LocaleThemeSwitch'
 import { OrbitalBackdrop } from '../../components/role/RoleArt'
 import { QuironFigure } from '../../components/quiron/QuironFigure'
 import { useLocale } from '../../i18n'
-import { useTheme } from '../../theme'
 import { platformApi, type Profile } from '../../platform/api'
 import { ROLE_CARDS } from '../../platform/roleCatalog'
 import { clearActiveMission, setSession } from '../../platform/session'
@@ -21,9 +21,8 @@ import '../../platform/enter.css'
 
 export function EnterPage() {
   const navigate = useNavigate()
-  const { lang, setLang } = useLocale()
+  const { lang } = useLocale()
   const en = lang === 'en'
-  const { resolved, setChoice } = useTheme()
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -95,18 +94,7 @@ export function EnterPage() {
       <header className="enter-top">
         <HeliosLogo variant="wordmark" />
         <div className="enter-top-actions">
-          <div className="enter-theme" role="group" aria-label={en ? 'Language' : 'Idioma'}>
-            <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
-            <button type="button" aria-pressed={lang === 'es'} onClick={() => setLang('es')}>ES</button>
-          </div>
-          <div className="enter-theme" role="group" aria-label={en ? 'Theme' : 'Tema'}>
-            <button type="button" aria-pressed={resolved === 'light'} onClick={() => setChoice('light')}>
-              {en ? 'Light' : 'Claro'}
-            </button>
-            <button type="button" aria-pressed={resolved === 'dark'} onClick={() => setChoice('dark')}>
-              {en ? 'Dark' : 'Oscuro'}
-            </button>
-          </div>
+          <LocaleThemeSwitch />
           <Link className="enter-link" to="/">{en ? 'Site' : 'Sitio'}</Link>
         </div>
       </header>

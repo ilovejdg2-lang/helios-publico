@@ -153,7 +153,7 @@ export function ChiefHome() {
                 </button>
                 <Link className="btn" to="/misiones">{en ? 'Mission hub' : 'Hub de misiones'}</Link>
                 <Link className="btn" to="/app/tripulacion">{en ? 'Crew board' : 'Tablero de tripulación'}</Link>
-                <Link className="btn" to="/app/mi-salud">{en ? 'My health' : 'Mi salud'}</Link>
+                <Link className="btn" to="/app/mi-salud">{en ? 'My Health' : 'Mi salud'}</Link>
               </div>
 
               <div className="chief-pending" style={{ marginTop: 14 }}>

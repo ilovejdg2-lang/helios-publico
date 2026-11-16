@@ -23,7 +23,7 @@ export function AboardCheckInBoard({ missionId, en }: { missionId: string; en: b
   }, [missionId])
 
   return (
-    <section className="chief-launch" aria-label={en ? 'Aboard check-in' : 'Chequeo a bordo'}>
+    <section className="chief-launch" aria-label={en ? 'Daily Check-in' : 'Chequeo a bordo'}>
       <div className="chief-launch-head">
         <div>
           <h2>{en ? 'How the crew woke up' : 'Cómo amaneció la tripulación'}</h2>

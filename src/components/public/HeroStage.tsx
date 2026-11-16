@@ -26,15 +26,15 @@ export function HeroStage({ reduced }: { reduced: boolean }) {
   const stageLabel =
     stage === 1
       ? en
-        ? 'Pre-flight'
+        ? 'Preflight'
         : 'Preembarque'
       : stage === 2
         ? en
-          ? 'On board'
+          ? 'In Flight'
           : 'A bordo'
         : en
-          ? 'Post-mission'
-          : 'Posmisión'
+          ? 'Completed'
+          : 'Finalizada'
 
   return (
     <div className="hero-stage">

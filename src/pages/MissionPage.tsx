@@ -26,9 +26,9 @@ const STAGE_HELP_EN: Record<MissionStage, string> = {
 }
 
 const STAGE_EN: Record<MissionStage, string> = {
-  preembarque: 'Pre-flight',
-  a_bordo: 'On board',
-  posmision: 'Post-mission',
+  preembarque: 'Preflight',
+  a_bordo: 'In Flight',
+  posmision: 'Completed',
 }
 
 export function MissionPage() {
@@ -161,7 +161,7 @@ export function MissionPage() {
 
       {state.mission.stage === 'posmision' ? (
         <section className="panel" data-testid="postmission-summary">
-          <h2>Seguimiento de posmisión</h2>
+          <h2>Revisión de misión</h2>
           <p className="lede">
             Resumen organizado para el personal autorizado. Las decisiones de recuperación corresponden a profesionales responsables.
           </p>

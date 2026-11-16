@@ -81,7 +81,7 @@ export const STAGES = [
   },
   {
     id: 'posmision',
-    title: 'Posmisión',
+    title: 'Finalizada',
     lead: 'Mantener la continuidad después del regreso.',
     items: [
       'Consultar la evolución.',

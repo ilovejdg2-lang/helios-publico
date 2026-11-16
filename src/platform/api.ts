@@ -1,5 +1,25 @@
 import { apiUrl } from '../api/baseUrl'
+import { uiLang } from '../locale'
 import { getActiveMissionId, getSessionToken } from './session'
+
+function connectionMessage() {
+  return uiLang() === 'en'
+    ? "This couldn't load right now. Try again in a moment."
+    : 'No se pudo cargar ahora. Probá de nuevo en un momento.'
+}
+
+function errorMessage(status: number, data: unknown) {
+  const record = data && typeof data === 'object' ? data as { message?: unknown } : {}
+  const raw = typeof record.message === 'string'
+    ? record.message
+    : Array.isArray(record.message)
+      ? record.message.filter((item): item is string => typeof item === 'string').join(', ')
+      : ''
+  if (status >= 500 || /^error\s+\d+$/i.test(raw) || /bad gateway|service unavailable/i.test(raw)) {
+    return connectionMessage()
+  }
+  return raw || connectionMessage()
+}
 import { careConversationSchema, careDraftSchema, type CareAiOptions } from '../../shared/careSchema'
 
 async function platformFetch<T>(path: string, init?: RequestInit): Promise<T> {
@@ -10,16 +30,14 @@ async function platformFetch<T>(path: string, init?: RequestInit): Promise<T> {
   if (token) headers.set('X-Helios-Session', token)
   const missionId = getActiveMissionId()
   if (missionId) headers.set('X-Helios-Mission', missionId)
-  const response = await fetch(apiUrl(path), { ...init, headers })
-  const data = await response.json().catch(() => ({}))
-  if (!response.ok) {
-    const message = typeof data?.message === 'string'
-      ? data.message
-      : Array.isArray(data?.message)
-        ? data.message.join(', ')
-        : `Error ${response.status}`
-    throw new Error(message)
+  let response: Response
+  try {
+    response = await fetch(apiUrl(path), { ...init, headers })
+  } catch {
+    throw new Error(connectionMessage())
   }
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(errorMessage(response.status, data))
   return data as T
 }
 

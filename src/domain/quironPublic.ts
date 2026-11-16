@@ -50,7 +50,7 @@ export function answerPublicLocal(question: string, locale: QuironPublicLocale, 
       demo: true,
       sources: ['HELIOS · sitio público'],
       text: en
-        ? 'In HELIOS you can explore the mission cycle (pre-flight, aboard, post-mission), see how indicators and inventory are presented, review documents, and enter the demonstration dashboard. Quirón on the public site explains the prototype — it does not open private crew records.'
+        ? 'In HELIOS you can explore the mission cycle (Preflight, In Flight, and Completed), see how indicators and inventory are presented, review documents, and enter the demonstration dashboard. Quirón on the public site explains the prototype — it does not open private crew records.'
         : 'En HELIOS podés explorar el ciclo de misión (preembarque, a bordo, posmisión), ver cómo se presentan indicadores e inventario, revisar documentos y entrar al panel de demostración. En el sitio público Quirón explica el prototipo; no abre registros privados de tripulación.',
     }
   }

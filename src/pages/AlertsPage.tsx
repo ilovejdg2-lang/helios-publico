@@ -41,14 +41,13 @@ function pickInitial(alerts: Alert[]) {
 }
 
 export function AlertsPage() {
-  const { state, dispatch, backendMode } = useApp()
+  const { state, dispatch } = useApp()
   const { lang } = useLocale()
   const en = lang === 'en'
   const navigate = useNavigate()
   const [tab, setTab] = useState<AlertStatus>('active')
   const [selectedId, setSelectedId] = useState(() => pickInitial(state.alerts))
   const [busy, setBusy] = useState<string | null>(null)
-  const nestAlerts = backendMode === 'connected'
   const counts = { active: 0, following: 0, closed: 0 }
   for (const alert of state.alerts) counts[alert.status] += 1
   const rows = state.alerts
@@ -84,29 +83,13 @@ export function AlertsPage() {
       <header className="alerts-head">
         <p className="alerts-kicker">{en ? 'Alerts' : 'Alertas'}</p>
         <h1>{en ? 'Alert center' : 'Centro de Alertas'}</h1>
-        <p className="alerts-lede">
-          {en ? 'A sensor notice does not close a health episode.' : 'Un aviso de sensor no cierra un episodio de salud.'}
-          <br />
-          {en ? 'Two equal readings are not presented as an attack.' : 'Dos lecturas iguales no se presentan como ataque'}
-        </p>
       </header>
 
       <section className="alerts-health" aria-labelledby="alerts-health-title">
         <div className="alerts-section-label">
-          <p className="donki-kicker">{en ? 'Health and follow-up' : 'Salud y seguimiento'}</p>
           <h2 id="alerts-health-title" className="alerts-section-title">
             {en ? 'Clinical notices' : 'Avisos clínicos'}
           </h2>
-          <p className="alerts-section-lede">
-            {en
-              ? 'Active, follow-up, and closed health alerts. Space-weather events are listed separately and do not change these counts.'
-              : 'Alertas de salud activas, en seguimiento y cerradas. Los eventos de clima espacial se listan aparte y no modifican estos contadores.'}
-            {nestAlerts
-              ? (en
-                ? ' Confirm / follow / close use Nest /api/alerts.'
-                : ' Confirmar / seguimiento / cerrar usan Nest /api/alerts.')
-              : ''}
-          </p>
         </div>
         <div className="alerts-filters" role="group" aria-label={en ? 'Alert status' : 'Estado de las alertas'}>
           {FILTERS.map((filter) => (

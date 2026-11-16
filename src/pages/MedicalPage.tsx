@@ -159,7 +159,7 @@ export function MedicalPage() {
             {en ? 'Copy local summary into the draft' : 'Copiar resumen local al borrador'}
           </button>
           <button className="med-save" type="button" data-testid="save-draft" aria-busy={saving} disabled={saving || !allowed} onClick={saveDraft}>
-            {saving ? (en ? 'Saving…' : 'Guardando…') : (en ? 'Save draft' : 'Guardar borrador')}
+            {saving ? (en ? 'Saving…' : 'Guardando…') : (en ? 'Save Draft' : 'Guardar borrador')}
           </button>
         </div>
         <p className="med-status" role="status">{note}</p>

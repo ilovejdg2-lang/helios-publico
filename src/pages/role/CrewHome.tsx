@@ -30,7 +30,7 @@ export function CrewHome() {
     <div className="rd rd-crew">
       <div className="rd-bg" aria-hidden="true"><CrewArt /></div>
       <header className="rd-head">
-        <p className="rd-kicker">{en ? 'My health' : 'Mi salud'}</p>
+        <p className="rd-kicker">{en ? 'My Health' : 'Mi salud'}</p>
         <h1>{en ? `Hi, ${name}. How are you feeling today?` : `Hola, ${name}. ¿Cómo te sentís hoy?`}</h1>
         <RoleContextBar
           missionName={detail?.mission.name}

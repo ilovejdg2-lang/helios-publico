@@ -16,7 +16,7 @@ const NAV_EN = ['Home', 'The project', 'How it works', 'About us', 'Video', 'Doc
 
 const STAGES_EN = [
   {
-    title: 'Pre-flight',
+    title: 'Preflight',
     lead: 'Prepare the mission with organized information and resources.',
     items: [
       'Record the mission characteristics.',
@@ -26,7 +26,7 @@ const STAGES_EN = [
     ],
   },
   {
-    title: 'On board',
+    title: 'In Flight',
     lead: 'Support follow-up during the mission.',
     items: [
       'Check indicators and changes.',
@@ -36,7 +36,7 @@ const STAGES_EN = [
     ],
   },
   {
-    title: 'Post-mission',
+    title: 'Completed',
     lead: 'Keep continuity after return.',
     items: [
       'Review progress.',
@@ -53,7 +53,7 @@ const DIFFERENTIATORS_EN = [
   { title: 'Indicators with context', text: 'Measurements are shown with age, quality, and integrity, not as a lone number.' },
   { title: 'Wellbeing and consent', text: 'A private space for emotional wellbeing, with an editable summary before sharing.' },
   { title: 'Continuity through interruptions', text: 'Essential functions can continue locally and sync when the link is available again.' },
-  { title: 'Post-mission follow-up', text: 'Keeps episodes, pending reviews, and used resources after return.' },
+  { title: 'Mission Review', text: 'Keeps episodes, pending reviews, and used resources after return.' },
 ] as const
 
 const QUESTIONS_EN = [
@@ -277,6 +277,8 @@ He is interested in software engineering, data, and cybersecurity, and is lookin
   },
 }
 
+const NAV_ES = ['Inicio', 'El proyecto', 'Cómo funciona', 'Acerca de nosotros', 'Video', 'Documentos', 'Datos'] as const
+
 export function publicNav(lang: Lang) {
   return [
     { to: '/', end: true },
@@ -288,75 +290,114 @@ export function publicNav(lang: Lang) {
     { to: '/datos', end: false },
   ].map((item, index) => ({
     ...item,
-    label: lang === 'en' ? NAV_EN[index] : ['Inicio', 'El proyecto', 'Cómo funciona', 'Acerca de nosotros', 'Video', 'Documentos', 'Datos'][index],
+    label: lang === 'es' ? NAV_ES[index] : NAV_EN[index],
   }))
 }
 
 export function publicStages(lang: Lang) {
   return STAGES.map((stage, index) => {
-    const extra = STAGES_EN[index]
-    return lang === 'en' && extra ? { ...stage, ...extra } : stage
+    const english = STAGES_EN[index]
+    const enStage = {
+      id: stage.id,
+      title: english.title,
+      lead: english.lead,
+      items: [...english.items],
+    }
+    if (lang !== 'es') return enStage
+    return {
+      id: stage.id,
+      title: stage.title || english.title,
+      lead: stage.lead || english.lead,
+      items: stage.items.length ? [...stage.items] : [...english.items],
+    }
   })
 }
 
 export function publicDifferentiators(lang: Lang) {
-  return lang === 'en' ? DIFFERENTIATORS_EN : DIFFERENTIATORS
+  if (lang !== 'es') return DIFFERENTIATORS_EN
+  return DIFFERENTIATORS_EN.map((item, index) => ({
+    title: DIFFERENTIATORS[index]?.title || item.title,
+    text: DIFFERENTIATORS[index]?.text || item.text,
+  }))
 }
 
+const CAPABILITIES_ES = [
+  { title: 'Quirón Bot', text: 'Asistente de consulta orientado a evidencias disponibles en el prototipo. Responde con fuentes visibles, reconoce datos faltantes y no inventa certeza clínica.' },
+  { title: 'Calidad de datos', text: 'Las mediciones de demostración se acompañan de antigüedad, integridad y contexto para evitar leer un número aislado como verdad absoluta.' },
+  { title: 'Inventario y recursos', text: 'Seguimiento de recursos propuestos, aprobados o faltantes vinculados a la preparación de la misión.' },
+  { title: 'Apoyo especializado', text: 'Flujos para facilitar revisión humana cuando el contexto lo sugiere, sin sustituir criterio profesional.' },
+  { title: 'Privacidad y consentimiento', text: 'Espacio privado para bienestar emocional con resumen editable antes de cualquier compartición autorizada.' },
+  { title: 'Continuidad local y sincronización', text: 'Funciones esenciales pueden continuar en local y sincronizar cuando el enlace vuelve a estar disponible.' },
+] as const
+
 export function publicQuestions(lang: Lang) {
-  return lang === 'en' ? QUESTIONS_EN : QUIRON_QUESTIONS
+  if (lang !== 'es') return QUESTIONS_EN
+  return QUESTIONS_EN.map((item, index) => QUIRON_QUESTIONS[index] || item)
 }
 
 export function publicPrinciples(lang: Lang) {
-  return lang === 'en' ? PRINCIPLES_EN : QUIRON_PRINCIPLES
+  if (lang !== 'es') return PRINCIPLES_EN
+  return PRINCIPLES_EN.map((item, index) => QUIRON_PRINCIPLES[index] ?? item)
 }
 
 export function publicCapabilities(lang: Lang) {
   const tones = ['lilac', 'mint', 'rose', 'warm', 'lilac', 'mint'] as const
-  if (lang !== 'en') {
-    return [
-      { title: 'Quirón Bot', text: 'Asistente de consulta orientado a evidencias disponibles en el prototipo. Responde con fuentes visibles, reconoce datos faltantes y no inventa certeza clínica.', tone: tones[0] },
-      { title: 'Calidad de datos', text: 'Las mediciones de demostración se acompañan de antigüedad, integridad y contexto para evitar leer un número aislado como verdad absoluta.', tone: tones[1] },
-      { title: 'Inventario y recursos', text: 'Seguimiento de recursos propuestos, aprobados o faltantes vinculados a la preparación de la misión.', tone: tones[2] },
-      { title: 'Apoyo especializado', text: 'Flujos para facilitar revisión humana cuando el contexto lo sugiere, sin sustituir criterio profesional.', tone: tones[3] },
-      { title: 'Privacidad y consentimiento', text: 'Espacio privado para bienestar emocional con resumen editable antes de cualquier compartición autorizada.', tone: tones[4] },
-      { title: 'Continuidad local y sincronización', text: 'Funciones esenciales pueden continuar en local y sincronizar cuando el enlace vuelve a estar disponible.', tone: tones[5] },
-    ]
-  }
-  return CAPABILITIES_EN.map((item, index) => ({ ...item, tone: tones[index] ?? 'mint' }))
-}
-
-export function publicTeam(lang: Lang): TeamMember[] {
-  if (lang !== 'en') return TEAM
-  return TEAM.map((member) => {
-    const extra = TEAM_EN[member.id]
-    return extra ? { ...member, ...extra } : member
+  return CAPABILITIES_EN.map((item, index) => {
+    const spanish = CAPABILITIES_ES[index]
+    const copy = lang === 'es' && spanish ? spanish : item
+    return { title: copy.title, text: copy.text, tone: tones[index] ?? 'mint' }
   })
 }
 
+export function publicTeam(lang: Lang): TeamMember[] {
+  return TEAM.map((member) => publicMember(lang, member))
+}
+
 export function publicMember(lang: Lang, member: TeamMember): TeamMember {
-  if (lang !== 'en') return member
-  const extra = TEAM_EN[member.id]
-  return extra ? { ...member, ...extra } : member
+  const english = TEAM_EN[member.id]
+  const enMember: TeamMember = english
+    ? {
+        ...member,
+        title: english.title,
+        summary: english.summary,
+        bio: english.bio,
+        tags: [...english.tags],
+        highlights: english.highlights ? [...english.highlights] : member.highlights,
+      }
+    : member
+  if (lang !== 'es') return enMember
+  return {
+    ...enMember,
+    title: member.title || enMember.title,
+    summary: member.summary || enMember.summary,
+    bio: member.bio || enMember.bio,
+    tags: member.tags.length ? [...member.tags] : enMember.tags,
+    highlights: member.highlights?.length ? [...member.highlights] : enMember.highlights,
+  }
 }
 
 export function publicDocs(lang: Lang): DocCard[] {
-  if (lang !== 'en') return DOCUMENTS
   return DOCUMENTS.map((doc) => {
-    const extra = DOCS_EN[doc.id]
-    return extra ? { ...doc, ...extra } : doc
+    const english = DOCS_EN[doc.id]
+    const enDoc: DocCard = english
+      ? { ...doc, title: english.title, description: english.description, language: english.language }
+      : doc
+    if (lang !== 'es') return enDoc
+    return { ...enDoc, title: doc.title || enDoc.title, description: doc.description || enDoc.description, language: doc.language || enDoc.language }
   })
 }
 
 export function publicSources(lang: Lang): DataSource[] {
-  if (lang !== 'en') return DATA_SOURCES
   return DATA_SOURCES.map((source) => {
-    const extra = SOURCES_EN[source.id]
-    return extra ? { ...source, ...extra } : source
+    const english = SOURCES_EN[source.id]
+    const enSource: DataSource = english ? { ...source, ...english } : source
+    if (lang !== 'es') return enSource
+    return { ...enSource, ...source, id: source.id, href: source.href, status: source.status, institution: source.institution, citation: source.citation }
   })
 }
 
 export function sourceStatus(lang: Lang, status: DataSource['status']) {
-  if (lang !== 'en') return { utilizado: 'Utilizado', consultado: 'Consultado', propuesto: 'Propuesto' }[status]
-  return { utilizado: 'Used', consultado: 'Consulted', propuesto: 'Proposed' }[status]
+  const english = { utilizado: 'Used', consultado: 'Consulted', propuesto: 'Proposed' }[status]
+  if (lang !== 'es') return english
+  return { utilizado: 'Utilizado', consultado: 'Consultado', propuesto: 'Propuesto' }[status] || english
 }

@@ -37,6 +37,11 @@
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   margin-bottom: 28px;
 }
+.plat-top-tools {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  flex-wrap: wrap; margin-left: auto;
+}
+.plat-top .plat-actions { margin-top: 0; }
 .plat-kicker {
   margin: 0 0 8px; color: #f5004f; font-size: 0.78rem; font-weight: 800;
   letter-spacing: 0.12em; text-transform: uppercase;
@@ -118,6 +123,21 @@
 }
 
 /* —— Mission hub cards + process strip —— */
+.mission-hub-filters {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px;
+}
+.mission-hub-filters button {
+  min-height: 40px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  background: transparent; color: inherit; font: inherit;
+  font-size: 0.82rem; font-weight: 700; cursor: pointer;
+}
+.mission-hub-filters button[aria-pressed="true"] {
+  background: #f5004f; border-color: #f5004f; color: #fff;
+}
+.mission-hub-filters button:focus-visible {
+  outline: 3px solid #f5004f; outline-offset: 2px;
+}
 .mission-hub-list { gap: 12px; }
 .mission-hub-card {
   display: grid;

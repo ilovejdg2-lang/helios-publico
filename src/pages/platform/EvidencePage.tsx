@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HeliosLogo } from '../../components/HeliosLogo'
+import { LocaleThemeSwitch } from '../../components/LocaleThemeSwitch'
 import { useLocale } from '../../i18n'
 import { CSA_RESOURCES } from '../../domain/csaResources'
 import { DEMO_REVIEW_PROTOCOL } from '../../domain/demoReviewProtocol'
@@ -42,10 +43,13 @@ export function EvidencePage() {
       <div className="plat-shell">
         <div className="plat-top">
           <HeliosLogo variant="wordmark" />
-          <div className="plat-actions">
-            <Link className="plat-btn ghost" to="/entrar">{en ? 'Roles' : 'Roles'}</Link>
-            <Link className="plat-btn ghost" to="/app">{en ? 'Open app' : 'Abrir app'}</Link>
-            <Link className="plat-btn ghost" to="/misiones">Hub</Link>
+          <div className="plat-top-tools">
+            <LocaleThemeSwitch />
+            <div className="plat-actions">
+              <Link className="plat-btn ghost" to="/entrar">{en ? 'Roles' : 'Roles'}</Link>
+              <Link className="plat-btn ghost" to="/app">{en ? 'Open app' : 'Abrir app'}</Link>
+              <Link className="plat-btn ghost" to="/misiones">Hub</Link>
+            </div>
           </div>
         </div>
         <p className="plat-kicker">{en ? 'Space Apps · Sources' : 'Space Apps · Fuentes'}</p>

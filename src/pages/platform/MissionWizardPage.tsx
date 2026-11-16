@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { HeliosLogo } from '../../components/HeliosLogo'
+import { LocaleThemeSwitch } from '../../components/LocaleThemeSwitch'
 import { useLocale } from '../../i18n'
 import { platformApi, type MissionEnvironment, type PrepItem, type PrepSuggestion, type StartCheck } from '../../platform/api'
 import { getSessionToken, getStoredProfile, setActiveMissionId } from '../../platform/session'
@@ -132,7 +133,10 @@ export function MissionWizardPage() {
       <div className="plat-shell">
         <div className="plat-top">
           <HeliosLogo variant="wordmark" />
-          <Link className="plat-btn ghost" to="/misiones">{en ? 'Back to hub' : 'Volver al hub'}</Link>
+          <div className="plat-top-tools">
+            <LocaleThemeSwitch />
+            <Link className="plat-btn ghost" to="/misiones">{en ? 'Back to hub' : 'Volver al hub'}</Link>
+          </div>
         </div>
         <p className="plat-kicker">{en ? 'Creation assistant' : 'Asistente de creación'}</p>
         <h1>{en ? 'New mission with Quirón' : 'Nueva misión con Quirón'}</h1>

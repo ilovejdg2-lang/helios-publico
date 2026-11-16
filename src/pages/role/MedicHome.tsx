@@ -60,7 +60,7 @@ export function MedicHome() {
         />
         <p className="rd-muted">
           {en
-            ? 'Your own heart rate is not the hero of this workspace. Personal health lives under “My health”. After revoke, this list must show “Ask access” — that is the consent demo for judges.'
+            ? 'Your own heart rate is not the hero of this workspace. Personal health lives under “My Health”. After revoke, this list must show “Ask access” — that is the consent demo for judges.'
             : 'Tu frecuencia cardíaca no es el bloque protagonista. La salud personal está en “Mi salud”. Tras revocar, esta lista debe decir “Pedir acceso”: esa es la demo de consentimiento para el jurado.'}
         </p>
       </header>
@@ -133,7 +133,7 @@ export function MedicHome() {
               <div className="rd-actions">
                 <Link className="rd-btn" to="/app/medico">{en ? 'Review case' : 'Revisar caso'}</Link>
                 <Link className="rd-btn ghost" to="/misiones/evidencia">{en ? 'Evidence' : 'Consultar evidencia'}</Link>
-                <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My health' : 'Ver mi salud'}</Link>
+                <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My Health' : 'Ver mi salud'}</Link>
               </div>
             </>
           ) : (
@@ -156,7 +156,7 @@ export function MedicHome() {
         <h2>{en ? 'Requests & follow-ups' : 'Solicitudes y seguimientos'}</h2>
         <div className="rd-actions">
           <Link className="rd-btn" to="/app/medico">{en ? 'Log follow-up' : 'Registrar seguimiento'}</Link>
-          <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My health' : 'Mi salud'}</Link>
+          <Link className="rd-btn ghost" to="/app/mi-salud">{en ? 'My Health' : 'Mi salud'}</Link>
         </div>
       </section>
     </div>

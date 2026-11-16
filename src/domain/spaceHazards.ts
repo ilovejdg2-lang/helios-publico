@@ -57,7 +57,7 @@ export const SPACE_HAZARDS: SpaceHazard[] = [
     },
     heliosContext: {
       es: 'Chequeo diario, autorreporte de ánimo, Quirón emocional y citas con psicología.',
-      en: 'Daily check-in, mood self-report, emotional Quirón and psychology appointments.',
+      en: 'Daily Check-in, mood self-report, emotional Quirón and psychology appointments.',
     },
     limits: {
       es: 'Un ánimo “3/5” no descarta riesgo psicosocial ni sustituye atención profesional.',

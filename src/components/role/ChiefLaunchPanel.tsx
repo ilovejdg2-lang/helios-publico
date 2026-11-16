@@ -86,7 +86,7 @@ export function ChiefLaunchPanel({
       await platformApi.setStage(missionId, 'postmission')
       await onChanged()
       setOk(en
-        ? 'Mission moved to post-mission. This is the demo “mission ended” stage.'
+        ? 'Mission moved to Completed. This is the demo “mission ended” stage.'
         : 'Misión pasada a posmisión. Esa es la etapa demo de “misión terminada”.')
     } catch (err) {
       setError(err instanceof Error ? err.message : (en ? 'Could not end mission' : 'No se pudo terminar la misión'))
@@ -262,7 +262,7 @@ export function ChiefLaunchPanel({
         <p className="muted">{stageBlurb(stage || '', en)}</p>
         <p className="chief-launch-locked" role="status">
           {en
-            ? 'Prep checklist is permanently closed after takeoff. It cannot be reopened.'
+            ? 'Preparation Checklist is permanently closed after takeoff. It cannot be reopened.'
             : 'El checklist de preparación quedó cerrado de forma definitiva tras el despegue. No se puede reabrir.'}
         </p>
         <p className="muted">
@@ -278,14 +278,14 @@ export function ChiefLaunchPanel({
               disabled={busy || !canEndMission}
               onClick={() => void endMission()}
             >
-              {en ? 'End mission → Post-mission' : 'Terminar misión → Posmisión'}
+              {en ? 'End mission → Completed' : 'Terminar misión → Finalizada'}
             </button>
           </div>
         ) : null}
         {stage === 'postmission' ? (
           <p className="muted">
             {en
-              ? 'Mission ended (post-mission). Review stays available; no more crew adds; checklist stays closed.'
+              ? 'Mission ended (Completed). Review stays available; no more crew adds; checklist stays closed.'
               : 'Misión terminada (posmisión). La revisión sigue disponible; no se agregan integrantes; el checklist permanece cerrado.'}
           </p>
         ) : null}

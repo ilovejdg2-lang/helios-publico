@@ -88,7 +88,7 @@ export function HomePage() {
           <h2 id="stages-title">{en ? 'One mission, three stages' : 'Una misión, tres etapas'}</h2>
           <p className="pub-lead">
             {en
-              ? 'Preparation, support on board, and continuity after return — drawn as a conceptual trajectory.'
+              ? 'Preparation, in-flight support, and continuity after return — drawn as a conceptual trajectory.'
               : 'Preparación, acompañamiento a bordo y continuidad después del regreso — trazados como trayectoria conceptual.'}
           </p>
         </div>

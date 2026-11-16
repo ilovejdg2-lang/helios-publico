@@ -28,7 +28,7 @@ export const JUDGE_CRITERIA = [
       title: 'Creativity',
       claim:
         'Not a generic vitals wall: four workspaces (chief, crew, medic, psychologist) + Quirón physical/emotional with privacy by default.',
-      prove: 'Switch Role and show My health vs Medical care vs Wellbeing.',
+      prove: 'Switch Role and show My Health vs Medical care vs Wellbeing.',
     },
   },
   {

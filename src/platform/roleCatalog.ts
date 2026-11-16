@@ -14,30 +14,30 @@ export type RoleCardCopy = {
 export const ROLE_CARDS: RoleCardCopy[] = [
   {
     id: 'chief',
-    name: { es: 'Jefe de misión', en: 'Mission chief' },
+    name: { es: 'Jefe de misión', en: 'Mission Commander' },
     blurb: {
       es: 'Organizá la tripulación, prepará los recursos y supervisá el estado de la misión.',
       en: 'Organize the crew, prepare resources, and supervise mission status.',
     },
     caps: {
       es: ['Tripulación y roles', 'Checklist de preparación', 'Alertas operativas'],
-      en: ['Crew and roles', 'Prep checklist', 'Operational alerts'],
+      en: ['Crew and roles', 'Preparation Checklist', 'Operational alerts'],
     },
-    cta: { es: 'Explorar como jefe', en: 'Explore as chief' },
+    cta: { es: 'Explorar como jefe', en: 'Explore as Mission Commander' },
     Art: ChiefArt,
   },
   {
     id: 'crew',
-    name: { es: 'Tripulante', en: 'Crew member' },
+    name: { es: 'Tripulante', en: 'Crew Member' },
     blurb: {
       es: 'Consultá tu salud, registrá cómo te sentís y recibí acompañamiento.',
       en: 'Check your health, log how you feel, and receive support.',
     },
     caps: {
       es: ['Chequeo diario', 'Síntomas y descanso', 'Quirón personal'],
-      en: ['Daily check-in', 'Symptoms and rest', 'Personal Quirón'],
+      en: ['Daily Check-in', 'Symptoms and rest', 'Personal Quirón'],
     },
-    cta: { es: 'Explorar como tripulante', en: 'Explore as crew' },
+    cta: { es: 'Explorar como tripulante', en: 'Explore as Crew Member' },
     Art: CrewArt,
   },
   {
@@ -51,7 +51,7 @@ export const ROLE_CARDS: RoleCardCopy[] = [
       es: ['Casos con permiso', 'Agenda clínica', 'Evidencia oficial'],
       en: ['Granted cases', 'Clinical schedule', 'Official evidence'],
     },
-    cta: { es: 'Explorar como médico', en: 'Explore as medic' },
+    cta: { es: 'Explorar como médico', en: 'Explore as Physician' },
     Art: MedicArt,
   },
   {
@@ -65,7 +65,7 @@ export const ROLE_CARDS: RoleCardCopy[] = [
       es: ['Sesiones y agenda', 'Resúmenes compartidos', 'Acceso voluntario'],
       en: ['Sessions and schedule', 'Shared summaries', 'Voluntary access'],
     },
-    cta: { es: 'Explorar como psicólogo', en: 'Explore as psychologist' },
+    cta: { es: 'Explorar como psicólogo', en: 'Explore as Psychologist' },
     Art: PsychArt,
   },
 ]

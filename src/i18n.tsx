@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { readStored, writeStored, type Lang } from './locale'
+import { applyDocumentLocale, readStored, writeStored, type Lang } from './locale'
 
 export type { Lang } from './locale'
 export { uiLang } from './locale'
 
 const COPY = {
   es: {
-    demoTitle: 'Start Mission Demo',
+    demoTitle: 'Iniciar la demo de la misión',
     demoLead: 'Guía corta para quien evalúa. No cambia los permisos ni los datos.',
     demoSteps: [
       'Abrí el monitor. El escenario inicial es fatiga gradual: Elena Torres muestra una frecuencia por encima de su línea base. Es simulación.',
@@ -138,18 +138,18 @@ const LocaleContext = createContext<{ lang: Lang; setLang: (lang: Lang) => void;
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
     const initial = readStored()
-    if (typeof document !== 'undefined') document.documentElement.lang = initial
+    if (typeof document !== 'undefined') applyDocumentLocale(initial)
     return initial
   })
 
   const setLang = useCallback((next: Lang) => {
-    document.documentElement.lang = next
+    applyDocumentLocale(next)
     writeStored(next)
     setLangState(next)
   }, [])
 
   useEffect(() => {
-    document.documentElement.lang = lang
+    applyDocumentLocale(lang)
   }, [lang])
 
   const value = useMemo(() => ({

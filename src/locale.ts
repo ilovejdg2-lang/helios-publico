@@ -30,6 +30,18 @@ export function writeStored(lang: Lang) {
   }
 }
 
+const DESCRIPTION: Record<Lang, string> = {
+  en: 'HELIOS — Health Evaluation & Life Indicators Observation System. A prototype for health support on simulated space missions. It is not a clinical tool.',
+  es: 'HELIOS — Sistema de observación de indicadores de salud y de vida. Prototipo de acompañamiento para misiones espaciales simuladas. No es una herramienta clínica.',
+}
+
+export function applyDocumentLocale(lang: Lang) {
+  const root = (globalThis as { document?: Document }).document
+  if (!root) return
+  root.documentElement.lang = lang
+  root.querySelector('meta[name="description"]')?.setAttribute('content', DESCRIPTION[lang])
+}
+
 /**
  * Browser: follows document.documentElement.lang (default en via index.html / LocaleProvider).
  * No document (unit tests): keep Spanish so domain fixtures stay stable.

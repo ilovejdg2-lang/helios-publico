@@ -103,7 +103,7 @@ export function Shell({ children }: { children: ReactNode }) {
           ? (en ? 'Wellbeing' : 'Bienestar')
           : (en ? 'My day' : 'Mi día')
   const homeLink = { to: '/app', label: homeLabel, icon: Activity, end: true }
-  const healthLink = { to: '/app/mi-salud', label: en ? 'My health' : 'Mi salud', icon: Heart, end: false }
+  const healthLink = { to: '/app/mi-salud', label: en ? 'My Health' : 'Mi salud', icon: Heart, end: false }
   const monitorLink = { to: '/app/monitor', label: shell.monitor, icon: Activity, end: false }
   const crewLink = { to: '/app/tripulacion', label: shell.crew, icon: HelmetIcon, end: false }
   const alertsLink = { to: '/app/alertas', label: shell.alerts, icon: AlertTriangle, end: false }
@@ -228,7 +228,7 @@ export function Shell({ children }: { children: ReactNode }) {
       {open ? <button className="scrim" aria-label={shell.closeMenu} onClick={() => setOpen(false)} /> : null}
       <aside className={open ? 'sidebar open' : 'sidebar'}>
         <div className="sidebar-top">
-          <Link className="brand-mark" to="/" onClick={() => setOpen(false)} title={shell.presentation}>
+          <Link className="brand-mark" to="/entrar" onClick={() => setOpen(false)} title={en ? 'Roles' : 'Roles'}>
             <HeliosLogo variant="mark" size={112} />
             <p className="brand-stack">
               Health evaluation
@@ -278,7 +278,7 @@ export function Shell({ children }: { children: ReactNode }) {
           {isMedical ? <MedicalBackdrop /> : null}
         </Suspense>
         <header className="topbar">
-          <Link className="mobile-brand" to="/" aria-label={shell.presentation}>
+          <Link className="mobile-brand" to="/entrar" aria-label={en ? 'Roles' : 'Roles'}>
             <HeliosLogo variant="wordmark" />
           </Link>
           <div className="row topbar-pills">

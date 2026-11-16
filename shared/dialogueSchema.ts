@@ -42,7 +42,7 @@ export function dialogueContextKey(state: {
 
 /** Curated public facts. No session data or private records belong here. */
 export const QUIRON_PUBLIC_FACTS = [
-  { id: 'helios', label: 'HELIOS · proyecto', data: 'HELIOS means Health Evaluation & Life Indicators Observation System. Independent fictional space-health prototype, not operated or endorsed by NASA. Mission stages: pre-flight, aboard, post-mission.' },
+  { id: 'helios', label: 'HELIOS · proyecto', data: 'HELIOS means Health Evaluation & Life Indicators Observation System. Independent fictional space-health prototype, not operated or endorsed by NASA. Mission stages: Preflight, In Flight, and Completed.' },
   { id: 'features', label: 'HELIOS · funciones', data: 'The dashboard demonstrates monitoring, alerts, sensor quality, communications and resource inventory. The deterministic engine evaluates simulated measurements. Quiron explains; people decide and explicitly perform actions.' },
   { id: 'privacy', label: 'HELIOS · privacidad', data: 'Public chat cannot access crew records. Mi espacio is a separate PIN-unlocked simulated astronaut session with explicit consent for model, history and each data category. Sharing requires a separate explicit action. Ops has no personal clinical data in this chat.' },
   { id: 'science', label: 'HELIOS · fuentes NASA', data: 'NASA DONKI covers space-weather events, OSDR public research datasets, RadLab radiation research. They are scientific/environmental context, not live astronaut medical readings. Chat has no live NASA lookup tool; never claim to have just fetched NASA data.' },

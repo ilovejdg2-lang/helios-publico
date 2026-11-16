@@ -1,5 +1,7 @@
-/** Placeholder ligero mientras carga una ruta diferida. */
+import { useLocale } from '../i18n'
+
 export function RouteFallback() {
+  const { lang } = useLocale()
   return (
     <div className="route-fallback" role="status" aria-live="polite" aria-busy="true">
       <div className="skeleton-grid" aria-hidden="true">
@@ -8,7 +10,7 @@ export function RouteFallback() {
         <span className="skeleton" style={{ height: 120, width: '100%', borderRadius: 16 }} />
         <span className="skeleton" style={{ height: 14, width: '54%' }} />
       </div>
-      <span className="sr-only">Cargando…</span>
+      <span className="sr-only">{lang === 'es' ? 'Cargando…' : 'Loading…'}</span>
     </div>
   )
 }

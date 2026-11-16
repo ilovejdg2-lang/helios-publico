@@ -28,7 +28,7 @@ export function ProyectoPage() {
         <h1>{en ? 'Continuous care for a human mission' : 'Cuidado continuo para una misión humana'}</h1>
         <p className="pub-lead">
           {en
-            ? 'HELIOS proposes connecting preparation, monitoring, and post-mission follow-up in one coherent space-health support experience.'
+            ? 'HELIOS proposes connecting preparation, monitoring, and Mission Review in one coherent space-health support experience.'
             : 'HELIOS propone conectar preparación, monitoreo y seguimiento posmisión en una experiencia coherente de acompañamiento en salud espacial.'}
         </p>
       </header>
@@ -61,7 +61,7 @@ export function ProyectoPage() {
         <h2>{en ? 'What does HELIOS propose?' : '¿Qué propone HELIOS?'}</h2>
         <p>
           {en
-            ? 'A support platform that organizes indicators, inventory, consent, and specialized support across Pre-flight, On board, and Post-mission — with transparency about data quality and the scope of the prototype.'
+            ? 'A support platform that organizes indicators, inventory, consent, and specialized support across Preflight, In Flight, and Completed — with transparency about data quality and the scope of the prototype.'
             : 'Una plataforma de acompañamiento que organiza indicadores, inventario, consentimiento y apoyo especializado a lo largo de Preembarque, A bordo y Posmisión — con transparencia sobre la calidad de los datos y el alcance del prototipo.'}
         </p>
       </Reveal>
